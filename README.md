@@ -5,7 +5,7 @@ Agent skills — small, composable, model-agnostic. Drop them into any repo and 
 ## Install
 
 ```bash
-npx skills@latest add Bandersnatch0x/skills
+npx skills@latest add Bandersnatch0x/agent-skills
 ```
 
 Or clone and symlink into your local harness skill dirs (`~/.claude/skills`, `~/.agents/skills`):
