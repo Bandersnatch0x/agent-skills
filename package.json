@@ -1,0 +1,12 @@
+{
+  "name": "bandersnatch0x-skills",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bandersnatch0x's agent skills — small, composable, model-agnostic.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Bandersnatch0x/skills"
+  },
+  "license": "MIT",
+  "packageManager": "npm@10.9.4"
+}

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "bandersnatch0x-skills",
+  "description": "Bandersnatch0x's agent skills — small, composable, model-agnostic.",
+  "owner": {
+    "name": "Bandersnatch0x",
+    "url": "https://github.com/Bandersnatch0x"
+  },
+  "plugins": [
+    {
+      "name": "bsx",
+      "description": "Agent skills for real engineering work.",
+      "source": "./",
+      "category": "productivity"
+    }
+  ]
+}
