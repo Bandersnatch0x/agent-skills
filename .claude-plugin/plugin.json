@@ -1,6 +1,8 @@
 {
   "name": "bsx",
   "skills": [
-    "./skills/engineering/distill-project-manual"
+    "./skills/engineering/distill-project-manual",
+    "./skills/productivity/claude-session-manager",
+    "./skills/productivity/claude-retrospective"
   ]
 }

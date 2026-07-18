@@ -22,6 +22,13 @@ scripts/link-skills.sh
 
 - **[distill-project-manual](./skills/engineering/distill-project-manual/SKILL.md)** — Distill an existing repo's scattered docs, conventions, and enforced rules into one compact agent operating manual, with a traceability gate (every rule points back to a real source) and a behavior probe (a fresh agent must answer routing questions from the manual alone). Use when onboarding future agents to a codebase you didn't set up.
 
+### Productivity
+
+**Model-invoked**
+
+- **[claude-session-manager](./skills/productivity/claude-session-manager/SKILL.md)** — Diagnose and maintain Claude Code local state with preserve-first inventory, verified handoffs, explicit archive gates, and recovery checks.
+- **[claude-retrospective](./skills/productivity/claude-retrospective/SKILL.md)** — Distill repeated session evidence into at most one minimal, evidence-backed durable behavior change.
+
 ## Buckets
 
 - `engineering/` — daily code work
