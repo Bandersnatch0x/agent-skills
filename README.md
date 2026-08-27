@@ -28,6 +28,7 @@ scripts/link-skills.sh
 
 - **[claude-session-manager](./skills/productivity/claude-session-manager/SKILL.md)** — Diagnose and maintain Claude Code local state with preserve-first inventory, verified handoffs, explicit archive gates, and recovery checks.
 - **[claude-retrospective](./skills/productivity/claude-retrospective/SKILL.md)** — Distill repeated session evidence into at most one minimal, evidence-backed durable behavior change.
+- **[find-hackathons](./skills/productivity/find-hackathons/SKILL.md)** — Find and verify hackathons by deadline, location, type, requirements, tracks, and prizes; optionally generate a bilingual local dashboard with participant matching and agent-ready brainstorm briefs.
 
 ## Buckets
 
