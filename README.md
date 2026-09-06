@@ -20,6 +20,7 @@ scripts/link-skills.sh
 
 **Model-invoked**
 
+- **[product-scope-audit](./skills/engineering/product-scope-audit/SKILL.md)** — Audit positioning, users, capability boundaries, and end-to-end journeys before adding more features. Surface unreachable value, unclear ownership, broken handoffs, friction, and a grounded next product bet; work with one agent by default.
 - **[distill-project-manual](./skills/engineering/distill-project-manual/SKILL.md)** — Distill an existing repo's scattered docs, conventions, and enforced rules into one compact agent operating manual, with a traceability gate (every rule points back to a real source) and a behavior probe (a fresh agent must answer routing questions from the manual alone). Use when onboarding future agents to a codebase you didn't set up.
 
 ### Productivity
