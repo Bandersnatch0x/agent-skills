@@ -1,6 +1,6 @@
 ---
 name: product-scope-audit
-description: Audit product positioning, target users, capability boundaries, and end-to-end journeys when an early project lacks focus, features have accumulated without a coherent workflow, or the user needs a grounded next product bet. Find unreachable capabilities, unclear ownership, broken handoffs, friction, and differentiation opportunities. Not for routine code review, isolated bug fixes, or visual polish alone.
+description: Evidence-backed continue / narrow / reposition / pause-to-validate / stop recommendation for an early or drifting product, plus one next action — auditing capability boundaries (own / integrate / defer / exclude), end-to-end journeys, and broken handoffs to find the smallest coherent product worth continuing. Use when the project lacks focus, features accumulated without a coherent workflow, or the next product bet needs grounding. Not for routine code review or isolated bug fixes.
 ---
 
 # Product Scope Audit

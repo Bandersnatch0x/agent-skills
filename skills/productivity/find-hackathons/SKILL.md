@@ -1,6 +1,6 @@
 ---
 name: find-hackathons
-description: Find and verify currently enterable hackathons, then optionally generate a bilingual local filtering webpage with participant-profile matching and agent-ready brainstorm briefs. Use when a user wants events filtered by deadline, location, participation format, eligibility or submission requirements, track, required technology, developer-account availability, or prize type such as cash, credits, hardware, services, or swag.
+description: Find and verify currently enterable hackathons against hard constraints — deadline, location, eligibility, tracks, required technology, prizes — then optionally generate a bilingual local filterable webpage with participant-profile matching and agent-ready brainstorm briefs. Use when the user wants to find, filter, verify, or compare hackathons.
 ---
 
 # Find Hackathons

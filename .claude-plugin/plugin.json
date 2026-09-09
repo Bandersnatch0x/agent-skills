@@ -2,7 +2,11 @@
   "name": "bsx",
   "skills": [
     "./skills/engineering/distill-project-manual",
-    "./skills/engineering/product-scope-audit",
+    "./skills/product/target-user-and-jtbd",
+    "./skills/product/product-positioning-audit",
+    "./skills/product/feature-scope-triage",
+    "./skills/product/goals-and-success-metrics",
+    "./skills/product/product-scope-audit",
     "./skills/productivity/claude-session-manager",
     "./skills/productivity/claude-retrospective",
     "./skills/productivity/find-hackathons"
