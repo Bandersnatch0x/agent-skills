@@ -23,6 +23,7 @@ scripts/link-skills.sh
 **Model-invoked**
 
 - **[distill-project-manual](./skills/engineering/distill-project-manual/SKILL.md)** — Distill an existing repo's scattered docs, conventions, and enforced rules into one compact agent operating manual, with a traceability gate (every rule points back to a real source) and a behavior probe (a fresh agent must answer routing questions from the manual alone). Use when onboarding future agents to a codebase you didn't set up.
+- **[implementation-quality-audit](./skills/engineering/implementation-quality-audit/SKILL.md)** — Audit a messy, half-finished, or agent-built repository for implementation quality: map, contract checklist, five-axis review, prioritized findings. Not for style-only or single-file nit work.
 
 ### Product
 
