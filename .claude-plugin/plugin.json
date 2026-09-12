@@ -7,6 +7,7 @@
     "./skills/product/product-positioning-audit",
     "./skills/product/feature-scope-triage",
     "./skills/product/goals-and-success-metrics",
+    "./skills/product/close-functional-loop",
     "./skills/product/product-scope-audit",
     "./skills/productivity/claude-session-manager",
     "./skills/productivity/claude-retrospective",
