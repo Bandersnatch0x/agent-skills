@@ -35,7 +35,7 @@ scripts/link-skills.sh
 - **[product-positioning-audit](./skills/product/product-positioning-audit/SKILL.md)** — 把项目宣称的定位与仓库实际构建的东西对账；揪出过度承诺、隐藏价值与定位漂移；收敛出 2–3 个候选定位与「不做清单」。
 - **[feature-scope-triage](./skills/product/feature-scope-triage/SKILL.md)** — 按一个已确定的定位，给每个功能判 Keep / Keep-as-is / Defer / Cut / Spin-out，并复原「新手 10 分钟路径」。
 - **[goals-and-success-metrics](./skills/product/goals-and-success-metrics/SKILL.md)** — 把模糊的目标变成 North Star、支撑指标与护栏指标、分阶段里程碑、反目标（「做到了也不算赢」），以及功能↔指标对照表。
-- **[close-functional-loop（收功能闭环）](./skills/product/close-functional-loop/SKILL.md)** — 做了很多却接不成环时用：钉死一句话 JTBD + 可观察完成态、带验收的竖切主路径、模块边界、Keep/Defer/Cut，再切片给 agent。开写码或派 agent 之前先跑。
+- **[close-functional-loop（收功能闭环）](./skills/product/close-functional-loop/SKILL.md)** — 做了很多却接不成环时用：先收一条可走通的 *tracer*（一句话闭环、带验收主路径、深模块边界、Keep/Defer/Cut，再切片）。开写码或派 agent 之前先跑。
 - **[product-scope-audit](./skills/product/product-scope-audit/SKILL.md)** — 整盘产品决策审查：continue / narrow / reposition / pause / stop 五选一 + 一个下一步行动，全部基于能力边界与端到端旅程的证据。
 
 ### Productivity（生产力）

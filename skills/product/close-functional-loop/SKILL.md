@@ -1,130 +1,81 @@
 ---
 name: close-functional-loop
 description: >-
-  use this when work piled up without a closable end-to-end loop — vague
-  requirements, fuzzy module boundaries, or "can't continue" after lots of
-  partial features; run before new coding or agent swarms
+  use this when work piled up without a closable end-to-end loop: missing
+  done-criteria, fuzzy module boundaries, or partial features that block
+  progress; run before coding or agent swarms
 ---
 # Close the Functional Loop
 
-Purpose: when requirements, framework, or boundaries are unclear, first close **one** verifiable end-to-end loop before adding more. Forbid treating "more modules" as progress.
+Close **one** walkable end-to-end loop before adding more surface area. Progress is a *tracer* the user can finish, not a growing pile of modules.
 
-## When to use
-- Lots of work exists, but no complete user path
-- Writing drifts and nobody can say what "done" means
-- Hard boundaries are needed before coding agents or a sprint
+## Prerequisite
+None. If positioning itself is the unknown, run **product-positioning-audit** or **target-user-and-jtbd** first, then return here.
 
-## Discipline (throughout)
-- No new features and no implement agents until a one-sentence loop exists.
-- Advance only **one** main path; everything else goes to the parking lot.
-- Outputs must be verifiable — ban unverifiable phrases like "improve the experience" or "enhance capability".
-- Cut decisions are proposals and migration plans only; real deletes or public removals need human approval.
+## Steps
 
----
+1. **Stop the clock** — three one-line facts:
+   - what has piled up (modules / docs / half-finished pieces)
+   - the one job the user still cannot finish
+   - the stuck cause (requirements / boundaries / acceptance / debt)
 
-## Step 0 — Stop the clock
-Write three concrete sentences (one line each):
-1. What has already piled up (modules / docs / half-finished pieces)
-2. The one thing the user still **cannot** finish
-3. The specific stuck reason (missing requirements / missing boundaries / missing acceptance / tech debt)
+   **Done when:** each line names concrete nouns, not moods.
 
-**Done when:** all three name concrete nouns, not moods.
+2. **Write the *one-sentence loop*** (≤2 sentences) and **3 *anti-goals***:
 
----
+   > When **[who]** in **[situation]** wants **[job]**, they use this product to **[key action]** and reach **[observable done state]**.
 
-## Step 1 — One-sentence loop (JTBD + done state)
-Fill in, at most two sentences:
+   Anti-goals are outcomes that still fail (stars without a finished path; modules without a next step after install).
 
-> When **[who]** in **[situation]** wants **[job]**, they use this product to **[key action]** and reach **[observable done state]**.
+   **Done when:** an outsider can tell done from not-done. Unclear done state → rewrite; stay on this step.
 
-Also write **3 anti-goals**: outcomes that still would not count as winning (e.g. stars rise while nobody finishes the main path; many modules ship but install leaves users with no next step).
+3. **Design one *tracer*** (newbie path, ≤10 minutes of mental model):
 
-**Done when:** an outsider can tell done vs not. If the done state is unclear, rewrite — do not enter Step 2.
+   `install/open → first success → second consolidation → clear end`
 
----
+   Per step: user action, minimal capability, acceptance (command / screen / return / file / log). Everything off-path goes to the *parking lot*.
 
-## Step 2 — Vertical-slice tracer
-Design only **one** newbie path (aim for ≤10 minutes of mental model):
+   **Done when:** every required step has acceptance, and the parking lot is listed.
 
-`install/open → first success → second consolidation → clear end`
+4. **Cut *deep module* boundaries** for capabilities on the tracer only:
 
-For each step write:
-- What the user sees / does
-- The minimal system capability required
-- How to accept it (command, screen, return value, file, log)
+   | Module | Public promise (API / command / page) | Internals swappable | Owned data | Forbidden deps |
 
-Label everything off-path as `parking lot` (out of scope this round).
+   Cross-module traffic uses the public promise only. Unused modules leave the plan or join the parking lot. Mutual need for internals → re-cut.
 
-**Done when:** no required step is "optional, later"; the parking-lot list exists.
+   **Done when:** each tracer step maps to exactly one module with no circular leaks.
 
----
+5. **Pin success** — North Star (repeated user behavior), this round's only milestone + acceptance, 1–2 guardrails, measurement path (or minimal logs/script).
 
-## Step 3 — Framework and boundaries (serve only this path)
-Draw **deep module** boundaries for capabilities on the path. Each module answers four questions:
+   **Done when:** the milestone fails a "what can you see when it is done?" check only if unmet.
 
-| Module | Public promise (API / command / page) | Internals swappable | Owned data | Forbidden deps |
-|--------|----------------------------------------|---------------------|------------|----------------|
+6. **Judge features** against the one-sentence loop — one tier each:
+   - **Keep** — loop fails without it
+   - **Keep-as-is** — needed; freeze
+   - **Defer** — keep code; drop from docs and tracer narrative
+   - **Cut / Spin-out** — proposal only (human approval before delete)
 
-Rules:
-- Cross-module access only via the public promise
-- Modules not needed this round → delete from the plan or move to the parking lot
-- If two modules need each other's internals → boundary failed; re-cut
+   Aim Keep ≤ ~1/3. Tracer may hold only Keep / Keep-as-is.
 
-**Done when:** every main-path step maps to exactly one module; no circular leaks.
+   **Done when:** replaying the tracer hits no Defer/Cut item.
 
----
+7. **Slice for build** — 3–7 mergeable slices. Each slice after merge makes the tracer more complete (or safer), carries acceptance, and declares blockers.
 
-## Step 4 — Success definition and guardrails
-Write:
-- **North Star (user-behavior level):** the repeated action people take after the loop works
-- **This round's only milestone:** one sentence + how to accept it (demo script or test checklist)
-- **1–2 guardrails:** things that must not get worse (perf, safety, compatibility, existing paths)
-- **Measurement:** where data comes from; if none, the minimal observation method (logs / manual script)
+   Order: `boundaries & interfaces → tracer → observability → polish`.
 
-**Done when:** the milestone can be vetoed by "what you can see when it is done".
+   Agent brief = one-sentence loop + anti-goals + this slice's acceptance + forbidden boundaries.
 
----
+   **Done when:** slice 1 alone demos "one step more complete than yesterday."
 
-## Step 5 — Feature map (Keep / Defer / Cut)
-Judge every existing feature or half-finished piece against the one-sentence loop:
+8. **Close the gate** — loop is closed only when:
+   - a stranger (or you tomorrow) walks the tracer
+   - acceptance is green
+   - parking-lot items stayed off the tracer
+   - the next round's single candidate loop is written (one sentence)
 
-- **Keep:** without it the one-sentence loop fails
-- **Keep-as-is:** needed, but freeze — no expansion
-- **Defer:** keep code; remove from docs and main-path narrative
-- **Cut / Spin-out:** proposal-level only (real delete needs human approval)
+   **Done when:** all four hold. Otherwise status stays *not closed*; open no new theme.
 
-Prefer Keep ≤ about 1/3 of the list. The main path may only contain Keep / Keep-as-is.
-
-**Done when:** replaying the main path encounters no Defer/Cut items.
-
----
-
-## Step 6 — Implementation slices (only then code / agents)
-Split the loop into 3–7 **mergeable** slices. Each slice must:
-- Make the main path more complete (or lower risk) after merge
-- Carry its own acceptance (tests / manual script)
-- Declare dependency edges (what blocks what)
-
-Recommended order: `boundaries & interfaces → vertical main path → observability/acceptance → polish`
-
-When dispatching an agent, paste: one-sentence loop + anti-goals + this slice's acceptance + forbidden boundaries.
-
-**Done when:** the first slice alone can demo "one step more complete than yesterday".
-
----
-
-## Step 7 — Definition of Done
-Declare the loop closed only when:
-1. A stranger (or you tomorrow) can walk the Step 2 path
-2. The acceptance checklist is fully green
-3. Parking-lot items did not sneak back onto the main path
-4. You wrote the **single next-round candidate loop** (one sentence) — otherwise sprawl restarts immediately
-
-If unmet → status remains "not closed"; do not open a new theme.
-
----
-
-## Output template (copy per project)
+## Output — *closed-loop card*
 
 ```markdown
 # Closed-loop card — <project> — <date>
@@ -137,39 +88,41 @@ If unmet → status remains "not closed"; do not open a new theme.
 2. …
 3. …
 
-## Main path (vertical slice)
-1. …
+## Tracer
+1. … (acceptance: …)
 2. …
 3. …
-Acceptance: …
 
 ## Module boundaries
 | Module | Public promise | Internals swappable | Data | Forbidden deps |
-|--------|----------------|---------------------|------|----------------|
 
 ## Milestone / North Star / guardrails
 …
 
 ## Feature judgments
 | Feature | Judgment | Why |
-|---------|----------|-----|
 
 ## Parking lot
 - …
 
 ## Slice order
 1. … (acceptance: …)
-2. …
 
-## DoD
-- [ ] Main path walkable
+## Gate
+- [ ] Tracer walkable
 - [ ] Acceptance green
-- [ ] Parking lot did not return
-- [ ] Next-round candidate loop: …
+- [ ] Parking lot stayed off tracer
+- [ ] Next candidate loop: …
 ```
 
-## Handoffs to related skills
-- Goals feel vague → **goals-and-success-metrics**
-- Too many features → **feature-scope-triage** (needs a one-sentence positioning/loop first)
+## Discipline
+- Write the one-sentence loop before opening features or implement agents.
+- Advance one tracer; route the rest to the parking lot.
+- Prefer acceptance you can demo or run.
+- Propose cuts and migrations; wait for human approval before deleting or publishing removals.
+
+## Handoffs
+- Vague goals → **goals-and-success-metrics**
+- Feature sprawl after the loop exists → **feature-scope-triage**
 - Positioning unclear → **product-positioning-audit** / **target-user-and-jtbd**
-- Card written and ready to land → to-spec / to-tickets / implement (or your repo's implement skill)
+- Card ready to land → to-spec / to-tickets / implement
