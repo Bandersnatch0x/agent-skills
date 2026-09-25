@@ -80,10 +80,11 @@ function render(L, meta) {
         </div>`;
       return `<div class="slot" style="top:${cardY(j)}px">${inner}</div>`;
     });
+    const empty = c.cards.length === 0 && c.hidden === 0 ? `<div class="slot" style="top:${cardY(0)}px"><div class="card empty">暂无</div></div>` : '';
     const more = c.hidden > 0 ? `<div class="slot" style="top:${cardY(c.cards.length)}px"><div class="card more">+${c.hidden} 张(列内有界,只显最近 ${P.collapseAt} 张)</div></div>` : '';
     return `<div class="col" style="left:${colX(i)}px;width:${P.colW}px;top:${P.boardY}px">
       <div class="chead ${chipAccent ? 'over' : ''}"><span>${esc(c.name)}</span><span class="chip ${chipAccent ? 'over' : ''}">${chip}</span></div>
-      ${cards.join('')}${more}
+      ${cards.join('')}${empty}${more}
     </div>`;
   }).join('\n    ');
 
@@ -92,7 +93,7 @@ function render(L, meta) {
   const svg = `<svg role="img" viewBox="0 0 ${boardW(L.cols.length) + P.pad * 2} ${P.boardY + P.headH + 12 + (P.collapseAt + 1) * (P.cardH + P.cardGap) + P.pad * 2}" width="100%" aria-labelledby="bt bd">
     <title id="bt">票况普查:地图 #${meta.map} 的 ${L.total} 张子票</title>
     <desc id="bd">按阶段分列的状态普查。${L.cols.map((c) => `${c.name} ${c.total}`).join(';')}。看板内不含任何连接件。</desc>
-    <rect x="0" y="0" width="${boardW(L.cols.length) + P.pad * 2}" height="${P.boardY}" fill="var(--paper-2)"/>
+    <rect x="0" y="0" width="${boardW(L.cols.length) + P.pad * 2}" height="${P.boardY}" fill="var(--paper2)"/>
     <text x="${P.pad}" y="40" class="hdr">票况普查 · 地图 #${meta.map} · ${L.total} 张子票</text>
     <text x="${P.pad}" y="64" class="hdr-note">${snap};取数于生成时固化、不做运行时刷新;看板内禁止连接件;等待仓外解锁 ${waiting} 张</text>
     <foreignObject x="${P.pad}" y="${P.boardY}" width="${boardW(L.cols.length)}" height="100%">
@@ -123,13 +124,16 @@ function render(L, meta) {
   .chip{border:1px solid var(--rule);border-radius:8px;padding:0 8px;color:var(--muted);font-size:12px}
   .chip.over{border-color:var(--accent);color:var(--accent);background:var(--accent-tint)}
   .slot{position:absolute;left:0;width:${P.colW}px;height:${P.cardH}px}
-  .card{height:${P.cardH}px;padding:8px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--paper-2);overflow:hidden}
+  .card{height:${P.cardH}px;padding:8px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--paper2);overflow:hidden}
   .card .t{color:var(--ink-strong);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .card .m{color:var(--muted);font-size:12px}
   .card.blocked{border-style:dashed;border-color:var(--accent);background:var(--accent-tint);box-shadow:inset 4px 0 0 var(--accent)}
-  .card.done{opacity:.55}
+  .card.done{border-color:var(--rule)}
+  .card.done .t{color:var(--muted);font-weight:500}
+  .card.done .m{color:var(--muted)}
   .card.waiting-external{border-style:dashed;border-color:var(--muted)}
   .card.more{border-style:dashed;color:var(--muted);display:flex;align-items:center}
+  .card.empty{border-style:dashed;color:var(--muted);display:flex;align-items:center}
 </style>
 </head>
 <body>
