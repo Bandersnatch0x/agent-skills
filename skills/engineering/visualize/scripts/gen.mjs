@@ -100,7 +100,7 @@ function render({ phases, entries, tracks }) {
   const [vw, vh] = P.viewBox;
   const g = [];
   // 页头条带
-  g.push(`  <rect data-role="band" x="0" y="0" width="${vw}" height="${P.headerH}" fill="var(--paper-2)"/>`);
+  g.push(`  <rect data-role="band" x="0" y="0" width="${vw}" height="${P.headerH}" fill="var(--paper2)"/>`);
   g.push(`  <text x="${P.pad}" y="24" class="hdr">七阶段流水线 · 概览层</text>`);
   g.push(`  <text x="${vw - P.pad}" y="24" class="hdr-note" text-anchor="end">细节见下表;命令绑定表不进图</text>`);
   // 连线先于节点发射(z 序)
@@ -169,7 +169,7 @@ ${g.join('\n')}
   .edge{fill:none;stroke:var(--rule);stroke-width:1.5}
   .edge.entry{stroke:var(--muted);stroke-dasharray:3 3}
   .edge.tick{stroke:var(--rule);stroke-dasharray:0}
-  .n{fill:var(--paper-2);stroke:var(--rule);stroke-width:1.5}
+  .n{fill:var(--paper2);stroke:var(--rule);stroke-width:1.5}
   .n.focal{fill:var(--accent-tint);stroke:var(--accent);stroke-width:2}
   .n-idx{fill:var(--muted);font-size:11px;text-anchor:middle}
   .n-name{fill:var(--ink-strong);font-size:15px;font-weight:600;text-anchor:middle}
