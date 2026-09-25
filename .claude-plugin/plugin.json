@@ -4,6 +4,8 @@
     "./skills/engineering/distill-project-manual",
     "./skills/engineering/implementation-quality-audit",
     "./skills/engineering/visualize",
+    "./skills/engineering/draft-spec",
+    "./skills/engineering/cut-tickets",
     "./skills/product/target-user-and-jtbd",
     "./skills/product/product-positioning-audit",
     "./skills/product/feature-scope-triage",
