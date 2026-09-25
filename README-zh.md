@@ -29,8 +29,9 @@ scripts/link-skills.sh
 
 **模型触发**
 
-收敛类 skill 构成一条流水线 —— 用户 → 定位 → 功能裁剪 / 指标 ——；工作堆了很多却接不成环时先跑 close-functional-loop（收功能闭环）；product-scope-audit 在「继续还是停止」本身成为问题时横跨全部维度。
+收敛类 skill 构成一条流水线 —— 用户 → 定位 → 功能裁剪 / 指标 ——；工作堆了很多却接不成环时先跑 close-functional-loop（收功能闭环）；product-scope-audit 在「继续还是停止」本身成为问题时横跨全部维度；idea-stress-test 则检验仓库底层的论点：这个仓库所押注的想法，在外部证据面前是否仍值得投入。
 
+- **[idea-stress-test](./skills/product/idea-stress-test/SKILL.md)** — 对仓库所押注的想法做压力测试并产出投入决策：重建论点、给证据分级（仓库事实只证明实现，不证明需求）、锁定最可能翻转决策的唯一「瓶颈信念」，并当场交付完整的下一个实验协议（动作 / 对象 / 翻转信号 / 成本上限 / kill 规则）。不审计内部产品一致性——那是 product-scope-audit 的事。
 - **[target-user-and-jtbd](./skills/product/target-user-and-jtbd/SKILL.md)** — 用证据锁定真实的主用户与其要完成的任务（JTBD），附「看起来像用户但其实不是」的反用户画像，以及下周就能做的最小验证。
 - **[product-positioning-audit](./skills/product/product-positioning-audit/SKILL.md)** — 把项目宣称的定位与仓库实际构建的东西对账；揪出过度承诺、隐藏价值与定位漂移；收敛出 2–3 个候选定位与「不做清单」。
 - **[feature-scope-triage](./skills/product/feature-scope-triage/SKILL.md)** — 按一个已确定的定位，给每个功能判 Keep / Keep-as-is / Defer / Cut / Spin-out，并复原「新手 10 分钟路径」。

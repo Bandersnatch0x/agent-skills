@@ -3,6 +3,7 @@
   "skills": [
     "./skills/engineering/distill-project-manual",
     "./skills/engineering/implementation-quality-audit",
+    "./skills/product/idea-stress-test",
     "./skills/engineering/visualize",
     "./skills/engineering/draft-spec",
     "./skills/engineering/cut-tickets",

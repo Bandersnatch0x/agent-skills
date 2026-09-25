@@ -29,8 +29,9 @@ scripts/link-skills.sh
 
 **Model-invoked**
 
-The triage skills form a pipeline — users → positioning → feature triage / metrics — with close-functional-loop as the gate when work piled up without a closable end-to-end path; product-scope-audit spans all of it when the continue / stop decision itself is the question.
+The triage skills form a pipeline — users → positioning → feature triage / metrics — with close-functional-loop as the gate when work piled up without a closable end-to-end path; product-scope-audit spans all of it when the continue / stop decision itself is the question, and idea-stress-test tests the thesis underneath: whether the idea this repo is built on still deserves investment when judged against outside evidence.
 
+- **[idea-stress-test](./skills/product/idea-stress-test/SKILL.md)** — Stress-test the idea a repo is built on into an investment decision: reconstruct the thesis, grade the evidence (repo facts establish implementation, not demand), name the one bottleneck belief most likely to flip the decision, and deliver a complete next-experiment protocol — action, flip signal, cost ceiling, kill rule. Not for internal product-coherence audits; that's product-scope-audit.
 - **[target-user-and-jtbd](./skills/product/target-user-and-jtbd/SKILL.md)** — Pin down the real primary user and their jobs-to-be-done from evidence, plus anti-users and a next-week validation slice.
 - **[product-positioning-audit](./skills/product/product-positioning-audit/SKILL.md)** — Audit the claimed positioning against what the repo actually builds; surface overpromise, hidden value, and drift; converge on candidate positionings with a not-doing list.
 - **[feature-scope-triage](./skills/product/feature-scope-triage/SKILL.md)** — Judge every feature Keep / Keep-as-is / Defer / Cut / Spin-out against one stated positioning, and restore the newbie 10-minute path.
