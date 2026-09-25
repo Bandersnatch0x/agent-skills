@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="zh" data-view="static-overview">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>七阶段流水线 · 概览层</title>
+<!-- 抛掷原型:静态流程视图样图(票 #28)。单一自包含 HTML + 内联 SVG,无脚本。
+     真源即本文件;SVG / PNG 若导出只作派生面,不得反过来当权威。
+     同输入必须产出逐字节相同:生成器 .scratch/workflow-view/gen.mjs,事实来源 docs/agents/dev-workflow.md -->
+<style>
+  :root{--paper:#fdfcfa;--paper2:#f5f2ee;--ink:#26221f;--ink-strong:#141210;--muted:#6f6862;--rule:#ded8d1;--accent:#c2563f;--accent-tint:#f7e7e2}
+  @media (prefers-color-scheme:dark){:root{--paper:#16151a;--paper2:#1e1d23;--ink:#f2eee9;--ink-strong:#fbf8f4;--muted:#a9a29b;--rule:#3a3840;--accent:#e2795f;--accent-tint:#3a2620}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 ui-sans-serif,system-ui,"Segoe UI",sans-serif}
+  .wrap{max-width:1408px;margin:0 auto;padding:24px}
+  svg{display:block;background:var(--paper)}
+  .hdr{fill:var(--ink-strong);font-size:15px;font-weight:600}
+  .hdr-note,.lbl{fill:var(--muted);font-size:12px}
+  .edge{fill:none;stroke:var(--rule);stroke-width:1.5}
+  .edge.entry{stroke:var(--muted);stroke-dasharray:3 3}
+  .edge.tick{stroke:var(--rule);stroke-dasharray:0}
+  .n{fill:var(--paper-2);stroke:var(--rule);stroke-width:1.5}
+  .n.focal{fill:var(--accent-tint);stroke:var(--accent);stroke-width:2}
+  .n-idx{fill:var(--muted);font-size:11px;text-anchor:middle}
+  .n-name{fill:var(--ink-strong);font-size:15px;font-weight:600;text-anchor:middle}
+  .track{fill:var(--accent-tint);stroke:var(--accent);stroke-width:1.5;stroke-dasharray:5 4}
+  .track-h{fill:var(--ink-strong);font-size:12px;font-weight:600}
+  .track-b{fill:var(--muted);font-size:12px}
+  table{border-collapse:collapse;width:100%;margin-top:20px;font-size:13px}
+  caption{text-align:left;color:var(--muted);font-size:12px;padding-bottom:8px}
+  th,td{border-top:1px solid var(--rule);padding:8px 10px;text-align:left;vertical-align:top}
+  th{color:var(--muted);font-weight:600}
+  td.nm{font-weight:600;white-space:nowrap}
+  td.slot{color:var(--muted);font-family:ui-monospace,Consolas,monospace;font-size:12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <svg role="img" viewBox="0 0 1360 560" width="100%" aria-labelledby="t d">
+    <title id="t">七阶段流水线概览</title>
+    <desc id="d">路由 → 探路 → 拷问 → 成谱 → 成票 → 落码 → 验收;下方一条横切机制轨道,共 2 条机制。</desc>
+    <defs><marker id="tick" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L8 4 L0 8 z" fill="var(--muted)"/></marker></defs>
+  <rect data-role="band" x="0" y="0" width="1360" height="36" fill="var(--paper-2)"/>
+  <text x="24" y="24" class="hdr">七阶段流水线 · 概览层</text>
+  <text x="1336" y="24" class="hdr-note" text-anchor="end">细节见下表;命令绑定表不进图</text>
+  <path data-role="connector" d="M184 280 H216" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M376 280 H408" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M568 280 H600" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M760 280 H792" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M952 280 H984" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M1144 280 H1176" class="edge" marker-end="url(#tick)"/>
+  <path data-role="connector" d="M96 104 V228 H296 V248" class="edge entry"/>
+  <path data-role="connector" d="M96 104 V228 H488 V248" class="edge entry"/>
+  <path data-role="connector" d="M96 104 V228 H680 V248" class="edge entry"/>
+  <text x="24" y="92" class="lbl">小任务</text>
+  <path data-role="connector" d="M304 104 V228 H1064 V248" class="edge entry"/>
+  <text x="232" y="92" class="lbl">缺陷修复</text>
+  <g data-role="node">
+    <rect x="24" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="104" y="274" class="n-idx">1</text>
+    <text x="104" y="296" class="n-name">路由</text>
+  </g>
+  <g data-role="node">
+    <rect x="216" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="296" y="274" class="n-idx">2</text>
+    <text x="296" y="296" class="n-name">探路</text>
+  </g>
+  <g data-role="node">
+    <rect x="408" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="488" y="274" class="n-idx">3</text>
+    <text x="488" y="296" class="n-name">拷问</text>
+  </g>
+  <g data-role="node">
+    <rect x="600" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="680" y="274" class="n-idx">4</text>
+    <text x="680" y="296" class="n-name">成谱</text>
+  </g>
+  <g data-role="node">
+    <rect x="792" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="872" y="274" class="n-idx">5</text>
+    <text x="872" y="296" class="n-name">成票</text>
+  </g>
+  <g data-role="node accent">
+    <rect x="984" y="248" width="160" height="64" rx="8" class="n focal"/>
+    <text x="1064" y="274" class="n-idx">6</text>
+    <text x="1064" y="296" class="n-name">落码</text>
+  </g>
+  <g data-role="node">
+    <rect x="1176" y="248" width="160" height="64" rx="8" class="n"/>
+    <text x="1256" y="274" class="n-idx">7</text>
+    <text x="1256" y="296" class="n-name">验收</text>
+  </g>
+  <g data-role="track accent">
+    <rect x="24" y="420" width="1312" height="44" rx="6" class="track"/>
+    <text x="36" y="447" class="track-h">横切机制(按触发条件生效,不占流水线位置)</text>
+    <text x="1324" y="447" class="track-b" text-anchor="end">检验追问 · 决策点辩论</text>
+  </g>
+  <path d="M36 420 V312" class="edge tick"/>
+  <path d="M1324 420 V312" class="edge tick"/>
+  </svg>
+  <table>
+    <caption>细节层:不进图。命令绑定表另见工作流文档文末「依赖与命令绑定」,本图不承载它。</caption>
+    <thead><tr><th>阶段</th><th>职责</th><th>出口判据</th></tr></thead>
+    <tbody>
+      <tr><td class="nm">1 路由</td><td>判断当前情况该进哪个阶段</td><td class="slot">已说明下一阶段及其输入</td></tr>
+      <tr><td class="nm">2 探路</td><td>超会话体量的工作 → 解票地图(地图 + 子票 + 阻塞边)</td><td class="slot">地图子票全部解决，已决区已回写</td></tr>
+      <tr><td class="nm">3 拷问</td><td>逼问计划;问题由用户裁,决策与术语沉淀入落点</td><td class="slot">无未决问题；用户裁决与确认术语分别入票和术语表</td></tr>
+      <tr><td class="nm">4 成谱</td><td>会话共识 → 谱(规格文档)</td><td class="slot">规格已发布到本仓议题，可被任务票引用</td></tr>
+      <tr><td class="nm">5 成票</td><td>谱 → 可执行票 + 阻塞边</td><td class="slot">任务票已建立，原生阻塞边已声明</td></tr>
+      <tr><td class="nm">6 落码</td><td>按票实现</td><td class="slot">约定门禁通过，完整日志可追溯</td></tr>
+      <tr><td class="nm">7 验收</td><td>全量测试通过后的双轴评审(标准轴 / 规格轴)+ 实现对谱的符合度核查</td><td class="slot">双轴发现全部裁决，符合度核查无未处理相悖项，结论已登记</td></tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
