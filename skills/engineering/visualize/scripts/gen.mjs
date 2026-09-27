@@ -1,4 +1,4 @@
-// 原型实现:incubator/workflow-view/gen.mjs —— 静态流程视图生成器(设计票 #28、实现票 07)
+// 原型实现:scripts/gen.mjs —— 静态流程视图生成器(设计票 #28、实现票 07)
 // 三段式:参数契约 → 坐标公式 → 复现清单;同输入必须产出逐字节相同的 HTML。
 // 事实来源 = 目标仓的**工作流文档**(默认目标仓 docs/agents/dev-workflow.md;`--src` 或位置参数覆盖)。
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -159,7 +159,7 @@ ${g.join('\n')}
 <title>七阶段流水线 · 概览层</title>
 <!-- 抛掷原型:静态流程视图样图(票 #28)。单一自包含 HTML + 内联 SVG,无脚本。
      真源即本文件;SVG / PNG 若导出只作派生面,不得反过来当权威。
-     同输入必须产出逐字节相同:生成器 .scratch/workflow-view/gen.mjs,事实来源 ${esc(SRC)} -->
+     同输入必须产出逐字节相同:生成器本技能内的 scripts/gen.mjs,事实来源 ${esc(SRC)} -->
 <style>
   ${cssVars()}
   ${BASE_CSS}
@@ -210,7 +210,7 @@ function checklist(html, facts) {
     probe(`焦点信号 ${count('accent')} 处 ≤ ${BUDGET.accents}`, count('accent') <= BUDGET.accents),
     // 几何 / 无脚本 / 自包含 / 尾换行四条与动态刀同源(tokens.mjs),此处不再各写一份
     ...commonProbes(html),
-    probe(`阶段 ${facts.phases.length} 个、入口标签 ${facts.entries.length} 个、机制 ${facts.tracks.length} 条`, facts.phases.length === 7),
+    probe(`阶段 ${facts.phases.length} 个(须 7)、入口标签 ${facts.entries.length} 个(须 ≥1)、机制 ${facts.tracks.length} 条(须 ≥1)`, facts.phases.length === 7 && facts.entries.length >= 1 && facts.tracks.length >= 1),
   ];
 }
 
@@ -223,7 +223,8 @@ try {
   for (const [t, ok] of boxes) console.log(`${ok ? 'ok  ' : 'FAIL'} ${t}`);
   const deterministic = html === html2;
   console.log(`${deterministic ? 'ok  ' : 'FAIL'} 同输入两跑逐字节相同(${Buffer.byteLength(html)} 字节)`);
-  if (argv.includes('--check')) process.exit(boxes.every(([, ok]) => ok) && deterministic ? 0 : 1);
+  // --check 与写盘路径同约:0 = 全过,2 = 断言或清单未过(早先这里退 1,与写盘路径的 2 不一致)
+  if (argv.includes('--check')) process.exit(boxes.every(([, ok]) => ok) && deterministic ? 0 : 2);
   if (boxes.some(([, ok]) => !ok) || !deterministic) { console.log('复现清单未过,不写出'); process.exit(2); }
   writeFileSync(OUT, html);
   console.log(`已写出 ${OUT}`);

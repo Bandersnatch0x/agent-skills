@@ -7,6 +7,11 @@ set -euo pipefail
 # Each entry is a symlink into this repo, so `git pull` keeps installed skills current.
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
+
+# 非符号链接的既有条目一律不删:实测两个技能目录里有大量实体目录,
+# 先删后建会把它们整个抹掉。默认跳过并打印;确要覆盖须显式 --force。
+FORCE=0
+for arg in "$@"; do [ "$arg" = "--force" ] && FORCE=1; done
 DESTS=("$HOME/.claude/skills" "$HOME/.agents/skills")
 
 names=()
@@ -32,7 +37,14 @@ for DEST in "${DESTS[@]}"; do
   mkdir -p "$DEST"
   for i in "${!names[@]}"; do
     name="${names[$i]}"; src="${srcs[$i]}"; target="$DEST/$name"
-    if [ -e "$target" ] && [ ! -L "$target" ]; then rm -rf "$target"; fi
+    if [ -e "$target" ] && [ ! -L "$target" ]; then
+      if [ "$FORCE" = "1" ]; then
+        rm -rf "$target"
+      else
+        echo "skip $name: $target 已存在且不是符号链接;不删除(确要覆盖请加 --force)" >&2
+        continue
+      fi
+    fi
     ln -sfn "$src" "$target"
     echo "linked $name -> $src ($DEST)"
   done

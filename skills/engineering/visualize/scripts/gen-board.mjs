@@ -109,7 +109,7 @@ function render(L, meta) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>票况普查 · 地图 #${meta.map}</title>
-<!-- 原型实现:incubator/workflow-view/gen-board.mjs —— 动态票况视图生成器(设计票 #29、实现票 08)。单一自包含 HTML + 内联 SVG,无脚本;快照在生成时固化。
+<!-- 生成器本技能内的 scripts/gen-board.mjs —— 动态票况视图生成器(设计票 #29、实现票 08)。单一自包含 HTML + 内联 SVG,无脚本;快照在生成时固化。
      皮肤面代币与静态刀共用同一份 tokens.mjs;同输入必须产出逐字节相同。 -->
 <style>
   ${cssVars()}
@@ -182,7 +182,8 @@ try {
   const det = html === html2;
   console.log(`${det ? 'ok  ' : 'FAIL'} 同输入两跑逐字节相同(${Buffer.byteLength(html)} 字节)`);
   const passed = boxes.every(([, ok]) => ok) && det;
-  if (argv.includes('--check')) process.exit(passed ? 0 : 1);
+  // --check 与写盘路径同约:0 = 全过,2 = 断言或清单未过
+  if (argv.includes('--check')) process.exit(passed ? 0 : 2);
   if (!passed) { console.log('复现清单未过,不写出'); process.exit(2); }
   writeFileSync(OUT, html);
   console.log(`已写出 ${OUT}`);
