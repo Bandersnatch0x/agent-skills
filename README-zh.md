@@ -24,6 +24,7 @@ scripts/link-skills.sh
 
 - **[distill-project-manual](./skills/engineering/distill-project-manual/SKILL.md)** — 把现有仓库里散落的文档、约定和强制规则蒸馏成一份紧凑的 agent 操作手册，带两道门槛：可溯源（每条规则指回真实来源）与行为探针（全新 agent 仅凭手册就能回答路由问题）。适合给不是你搭的代码库做 agent 入职。
 - **[implementation-quality-audit](./skills/engineering/implementation-quality-audit/SKILL.md)** — 对混乱、半成品或由 agent 生成的代码库做实现质量审计：结构映射、契约清单、五轴审查、按风险排序的报告；不做纯风格审查，也不代改代码。
+- **[timeline-show](./skills/engineering/timeline-show/SKILL.md)** — 一次长任务的可复核台账：自动开工、随执行追加事件，把 TODO / DOING / DONE、决策点、卡点与检查证据渲染成可双击离线打开、10 秒自刷新的自包含 HTML。用于预计超过 30 分钟的长任务，或有人要看「全貌」时。
 
 ### Product（产品）
 
