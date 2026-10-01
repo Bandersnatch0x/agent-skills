@@ -29,7 +29,14 @@ note() {
 }
 
 human_size() {
-    du -sh "$1" 2>/dev/null | awk '{print $1}' || printf 'unknown\n'
+    # 只依赖 POSIX 的 du -sk(千字节)+ awk 自行折算:BSD/macOS 的 du 没有 -h 的排序形态,
+    # 用 `du -sh` 配合 `sort -hr` 会在这两处平台直接报错(GNU 扩展)。
+    du -sk "$1" 2>/dev/null | awk '{
+        kb = $1
+        if (kb >= 1048576) printf "%.1fG\n", kb / 1048576
+        else if (kb >= 1024) printf "%.1fM\n", kb / 1024
+        else printf "%dK\n", kb
+    }' || printf 'unknown\n'
 }
 
 count_entries() {
@@ -51,8 +58,10 @@ print_root_usage() {
     printf 'Total: %s\n' "$(human_size "$CLAUDE_HOME")"
     if ((${#entries[@]} > 0)); then
         printf 'Largest top-level entries:\n'
-        { du -sh "${entries[@]}" 2>/dev/null || true; } \
-            | sort -hr \
+        # 排序也走数值:POSIX 无 `sort -h`,用 -sk 的千字节数排,再折算成人读形态。
+        { du -sk "${entries[@]}" 2>/dev/null || true; } \
+            | sort -rn \
+            | while read -r kb path; do printf '%s\t%s\n' "$(human_size "$path")" "$path"; done \
             | sed -n '1,10p'
     fi
 }
