@@ -913,6 +913,17 @@
     const epochEl = document.getElementById('journey-epoch-ticks');
     if (epochEl) epochEl.textContent = `EPOCH TICKS: ${telemetry.epoch_ticks !== undefined ? telemetry.epoch_ticks : '—'}`;
 
+    // 票50 ①：结论摘要位（当前节点 / 下一等待点）。真源 = state.pipeline 的声明状态；
+    // 无真源时**明确写未知**，不从 activity/trail 历史事件推断当前阶段（诚实边界）。
+    const pipeSource = Array.isArray(state.pipeline) ? state.pipeline : [];
+    const nodeLabel = (n) => `#NO${String(n.seq).padStart(2, '0')} ${n.name || ''}`.trim();
+    const curNode = pipeSource.find((n) => n && n.status === 'current');
+    const nextWaitNode = pipeSource.find((n) => n && n.status === 'awaiting');
+    const curSumEl = document.getElementById('journey-summary-current');
+    if (curSumEl) curSumEl.textContent = curNode ? nodeLabel(curNode) : '当前节点未提供';
+    const nextSumEl = document.getElementById('journey-summary-next');
+    if (nextSumEl) nextSumEl.textContent = nextWaitNode ? nodeLabel(nextWaitNode) : '下一等待点未提供';
+
     // 三段状态卡
     const stagesWrap = document.getElementById('journey-stages');
     if (stagesWrap && Array.isArray(state.stages) && state.stages.length > 0) {
@@ -1091,28 +1102,21 @@
       }
     }
 
-    // 节点详情抽屉 (INSPECTOR)：绑定当前活跃节点
+    // 节点详情抽屉 (INSPECTOR)：绑定「所选节点」（票53，见 renderInspector()）
     const items = Array.isArray(state.items) ? state.items : [];
+    // 票50 ②：pipeline 零节点（无真源）→ 全未知占位，按内容收缩压掉高度；
+    // 结构/锚点（impact 5 格、kv 行、fingerprint）全保留，只收留白。
+    const inspectorCardEl = document.getElementById('journey-inspector');
+    if (inspectorCardEl) inspectorCardEl.classList.toggle('is-compact', pipeline.length === 0);
     const activeNode = pipeline.find(node => node.status === 'current') || pipeline[0] || {};
-    const activeStatus = PIPELINE_STATUS_CLASSES.includes(activeNode.status) ? activeNode.status : 'queued';
     const inspected = items.find(i => i.id === activeNode.item_ref) || {};
 
-    const nodeTitleEl = document.getElementById('inspector-node-title');
-    if (nodeTitleEl) {
-      const seqLabel = activeNode.seq ? String(activeNode.seq).padStart(2, '0') : '--';
-      nodeTitleEl.textContent = `#NO${seqLabel} ${activeNode.name || ''}`.trim();
-    }
-    const nodeStatusEl = document.getElementById('inspector-node-status');
-    if (nodeStatusEl) {
-      const statusLabels = { settled: 'SETTLED', current: 'RUNNING', awaiting: 'AWAITING', queued: 'QUEUED' };
-      nodeStatusEl.textContent = statusLabels[activeStatus] || 'IDLE';
-    }
-    const targetEl = document.getElementById('inspector-target');
-    if (targetEl) targetEl.textContent = `TARGET: ${inspected.target || '--'}`;
+    // 票53：title / target / executor / status 改由「所选节点」驱动 —— 见 renderInspector()，
+    // 默认 = 画布事件流最新一条、点任一节点切换（与 #impact-drawer 同源同入口）。
+    // 事件真源 {seq,t,type,ref,actor}（scripts/project.mjs:478）与 items[] 均**不含**
+    // tokens/elapsed/proof/fingerprint → 这些字段无真源，一律诚实留 —/--，不回落静态占位。
     const tokensEl = document.getElementById('inspector-tokens');
     if (tokensEl) tokensEl.textContent = inspected.tokens ?? '— Tokens';
-    const executorEl = document.getElementById('inspector-executor');
-    if (executorEl) executorEl.textContent = inspected.executor || '--';
     const elapsedEl = document.getElementById('inspector-elapsed');
     if (elapsedEl) elapsedEl.textContent = inspected.elapsed || '—';
     const proofEl = document.getElementById('inspector-proof');
@@ -1478,7 +1482,7 @@
       // 点击打开影响面抽屉（功能 7）
       const hit = svgEl('circle', { cx: String(p.x), cy: String(p.y), r: '16', class: 'journey-node-hit', fill: 'transparent' });
       grp.appendChild(hit);
-      grp.addEventListener('click', () => openImpactDrawer(state, p.ev));
+      grp.addEventListener('click', () => selectNode(state, p.ev));
 
       // 标签避让：先测量真实文本宽度（getComputedTextLength），再做候选位择优
       const label = p.ev.title || `${p.ev.type} ${p.ev.ref || ''}`;
@@ -1651,7 +1655,7 @@
       const lbl = svgEl('text', { x: String(p.x), y: String(p.y + 26), 'text-anchor': 'middle', class: 'atlas-node-label' });
       lbl.textContent = p.n.ref || String(p.n.seq);
       grp.appendChild(lbl);
-      grp.addEventListener('click', () => openImpactDrawer(state, p.n));
+      grp.addEventListener('click', () => selectNode(state, p.n));
       grp.style.cursor = 'pointer';
       panel.appendChild(grp);
     });
@@ -1697,6 +1701,59 @@
     const options = Array.isArray(decision.options) ? decision.options : [];
     const def = options.find(o => o.default);
     return (def && def.impact && def.impact.ripple) || null;
+  }
+
+  // 票52 · 影响面抽屉默认显示「当前节点」。
+  // 「当前节点」= 画布事件流（state.activity 时间序）里**最新的一条**——与票50 的
+  // #journey-summary「当前节点」不是一回事（后者读 state.pipeline 的声明状态，真跑恒未知）。
+  // 真跑态无事件时渲显式空态，不发明节点。
+  // 票53 · 节点详情抽屉（#journey-inspector）接「所选节点」。
+  // 真源 = activity 事件 {seq,t,type,ref,actor}（scripts/project.mjs:478 唯一生产者）：
+  //   title → 事件标识 `#<seq> <type> <ref>`；target → `ref`；executor → `actor`。
+  // 事件与 items[] 都没有 status/elapsed/tokens/proof/fingerprint 的生产者 → 那些字段
+  // 一律诚实留 —/--（见 renderJourney 内兜底）；旧 `QUEUED` 系无源静态假状态，已去掉。
+  function renderInspector(ev) {
+    const titleEl = document.getElementById('inspector-node-title');
+    if (titleEl) {
+      if (ev) {
+        const seqLabel = (ev.seq !== undefined && ev.seq !== null) ? String(ev.seq).padStart(2, '0') : '--';
+        const ident = [ev.type, ev.ref].filter(Boolean).join(' ');
+        titleEl.textContent = `#${seqLabel} ${ident}`.trim();
+      } else {
+        titleEl.textContent = '#--';
+      }
+    }
+    const statusEl = document.getElementById('inspector-node-status');
+    if (statusEl) statusEl.textContent = '—';
+    const targetEl = document.getElementById('inspector-target');
+    if (targetEl) targetEl.textContent = `TARGET: ${(ev && ev.ref) || '--'}`;
+    const executorEl = document.getElementById('inspector-executor');
+    if (executorEl) executorEl.textContent = (ev && ev.actor) || '--';
+  }
+
+  // 票53 · 「所选节点」统一入口：右侧 #journey-inspector 与底部 #impact-drawer 同源同步。
+  function selectNode(state, ev) {
+    openImpactDrawer(state, ev);   // 票52 路径，行为不变
+    renderInspector(ev);
+  }
+
+  function renderImpactDrawerForCurrentNode(state) {
+    const drawer = document.getElementById('impact-drawer');
+    const { events } = prepareActivity(state);
+    const latest = events.length ? events[events.length - 1] : null;
+    if (latest) { selectNode(state, latest); return; }
+    renderInspector(null);   // 票53：真跑态无事件时右侧面板同步空态
+    if (!drawer) return;
+    const titleEl = document.getElementById('drawer-title');
+    if (titleEl) titleEl.textContent = '影响面快照 · 当前节点未知';
+    const left = document.getElementById('drawer-estimated');
+    if (left) left.textContent = '';
+    const right = document.getElementById('drawer-actual');
+    if (right) right.textContent = '';
+    const note = document.getElementById('drawer-note');
+    if (note) note.textContent = '画布事件流为空，当前节点未知（不推断）。';
+    drawer.style.display = 'block';
+    drawer.removeAttribute('data-ref');
   }
 
   function openImpactDrawer(state, ev) {
@@ -1777,6 +1834,8 @@
     }
     renderAtlas(state);
     renderBranches(state);
+    // 票52：默认显示「当前节点」（画布事件流最新一条）
+    renderImpactDrawerForCurrentNode(state);
   }
 
   function switchJourneyMode(mode) {

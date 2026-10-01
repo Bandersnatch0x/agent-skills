@@ -11,18 +11,8 @@
   <!-- 左侧控制台常驻导航侧栏 (Aside) -->
   <aside class="cockpit-aside" id="cockpit-aside">
     <div class="aside-top">
-      <!-- 品牌标识 -->
-      <div class="brand-row">
-        <div class="brand-icon-box">
-          <svg class="svg-icon icon-primary" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <span class="brand-name">CHRONOS</span>
-          <span class="brand-sub">CONTINUUM // V4.2</span>
-        </div>
-      </div>
+      <!-- 票51：纯装饰品牌块（波形图标 + 品牌名 CHRONOS + 版本副串）整块删 —— 无真源、无导航功能
+           （票34判例：纯装饰品牌串连标签整块删，不换措辞留观感） -->
 
       <!-- 导航组标题 -->
       <div class="nav-section-label">Navigation Deck</div>
@@ -76,11 +66,11 @@
 
     <!-- 侧栏底部时序引擎遥测 -->
     <div class="aside-bottom">
-      <div class="temporal-row">
-        <span class="temporal-label">TEMPORAL ENGINE</span>
-      </div>
+      <!-- 票51：纯装饰遥测名（时序引擎名行）整行删（无配对值、无真源；保留它只是给空区块加标题） -->
       <div class="temporal-drift-row">
-        <span class="drift-label">EPOCH DRIFT</span>
+        <!-- 票51：降权 —— 去大写漂移遥测名，改中性中文小字「漂移」；
+             保留 #aside-epoch-drift 值槽与下方 progress 条（票45 ② 诚实性断言锚点） -->
+        <span class="drift-label">漂移</span>
         <span class="drift-val" id="aside-epoch-drift">—</span>
       </div>
       <div class="temporal-track">
@@ -95,10 +85,8 @@
     <!-- 顶部固定 Header 遥测栏 -->
     <header class="cockpit-header" id="cockpit-header">
       <div class="header-left">
-        <div class="telemetry-pill">
-          <span class="pulse-dot"></span>
-          <span class="pill-text">AUTONOMOUS TELEMETRY</span>
-        </div>
+        <!-- 票51：纯装饰遥测腔（自主遥测 pill，含脉冲点）整块删（无值、无真源；
+             票47 S4 曾以 CSS 隐藏，本票从 DOM 砍除，不再占结构/树序） -->
         <div class="contract-text">
           <span class="contract-label">CONTRACT:</span>
           <!-- ISO-8601 有真源:scripts/tl.mjs nowIso() = new Date().toISOString()，事件时间戳一律 ISO-8601，故本 claim 保留 -->
@@ -337,7 +325,9 @@
                   <polyline points="4 17 10 11 4 5"></polyline>
                   <line x1="12" y1="19" x2="20" y2="19"></line>
                 </svg>
-                <span>KERNEL: <span class="telemetry-bold" id="telemetry-kernel">v4.2.1-RELEASE</span></span>
+                <!-- 票51 / 票37 R1：KERNEL 版本串为死静态串（project() 真输出不含 telemetry 键 →
+                     tel.kernel 恒 undefined → app.js:792 无条件覆写为 '—'），故源码层同步改 '—' -->
+                <span>KERNEL: <span class="telemetry-bold" id="telemetry-kernel">—</span></span>
               </div>
               <div class="footer-telemetry-item">
                 <svg class="svg-icon icon-primary" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -566,6 +556,19 @@
             </div>
           </div>
 
+          <!-- 票50 ①：Journey 首屏结论摘要位（与 Board 同构；真源 = state.pipeline 声明状态，
+               无真源时明确写「未提供」，绝不从 activity/trail 历史事件推断当前阶段） -->
+          <div class="journey-summary" id="journey-summary">
+            <div class="board-summary-cell">
+              <span class="bsc-label">当前节点</span>
+              <span class="bsc-val" id="journey-summary-current">当前节点未提供</span>
+            </div>
+            <div class="board-summary-cell">
+              <span class="bsc-label">下一等待点</span>
+              <span class="bsc-val" id="journey-summary-next">下一等待点未提供</span>
+            </div>
+          </div>
+
           <!-- J-2. 三段状态卡 (01 做到哪了 / 02 哪里卡住 / 03 什么在等我) -->
           <section class="stage-grid" id="journey-stages"></section>
 
@@ -645,13 +648,13 @@
                 </div>
                 <div class="inspector-node-box">
                   <div class="inspector-node-row">
-                    <span class="inspector-node-title" id="inspector-node-title">#NO--</span>
-                    <span class="inspector-node-status" id="inspector-node-status">IDLE</span>
+                    <span class="inspector-node-title" id="inspector-node-title">#--</span>
+                    <span class="inspector-node-status" id="inspector-node-status">—</span>
                   </div>
                   <div class="inspector-meta-row">
                     <span id="inspector-target">TARGET: --</span>
                     <span class="inspector-meta-sep">•</span>
-                    <span class="inspector-tokens" id="inspector-tokens">0 Tokens</span>
+                    <span class="inspector-tokens" id="inspector-tokens">— Tokens</span>
                   </div>
                 </div>
                 <div class="inspector-kv-list">
@@ -769,7 +772,7 @@
           </div>
 
           <!-- 功能 7 · 影响面快照抽屉 -->
-          <aside class="impact-drawer" id="impact-drawer" style="display: none;">
+          <aside class="impact-drawer" id="impact-drawer">
             <div class="drawer-head">
               <div class="drawer-head-left">
                 <svg class="svg-icon icon-primary" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">

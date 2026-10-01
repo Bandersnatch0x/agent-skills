@@ -34,6 +34,18 @@
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
 
+  /* ── 排版阶梯 (type scale · 票48) ── */
+  --fs-3xs: 10px;   /* micro：徽章 / 计数 / 极小注记 */
+  --fs-2xs: 11px;   /* caption：副标签 / 元数据 */
+  --fs-xs: 12px;    /* small：数据 / 代码 / 表格副标签 */
+  --fs-sm: 14px;    /* body：正文（= html 默认） */
+  --fs-md: 16px;    /* lead：卡片标题 / 强调值 */
+  --fs-lg: 20px;    /* title：小节标题 */
+  --fs-xl: 32px;    /* display：视图大标题 */
+  /* ── 字距（每阶一条）：中文与正文一律 0；仅拉丁大写 micro 标签用 0.06em ── */
+  --ls-none: 0;
+  --ls-caps: 0.06em;
+
   /* ── 圆角梯度 ── */
   --radius-xs: 2px;
   --radius-sm: 4px;
@@ -59,7 +71,7 @@ html, body {
   background-color: var(--bg);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -74,66 +86,66 @@ html, body {
 /* ── 文字阶梯实用工具 ── */
 .font-display-lg {
   font-family: var(--font-sans);
-  font-size: 48px;
+  font-size: var(--fs-xl);
   line-height: 56px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--ls-none);
 }
 
 .font-headline-xl {
   font-family: var(--font-sans);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
 }
 
 .font-headline-md {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: var(--ls-none);
 }
 
 .font-body-lg {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 24px;
   font-weight: 400;
 }
 
 .font-body-sm {
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
   font-weight: 400;
-  letter-spacing: 0.01em;
+  letter-spacing: var(--ls-none);
 }
 
 .font-telemetry-data {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   line-height: 18px;
   font-weight: 500;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-none);
 }
 
 .font-label-caps {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   line-height: 16px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
 }
 
 .font-timestamp-micro {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: var(--fs-3xs);
   line-height: 14px;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-none);
 }
 
 /* SVG 图标基础 */
@@ -176,15 +188,6 @@ html, body {
   }
 }
 
-.pulse-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  display: inline-block;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
 .pulse-ping {
   position: relative;
 }
@@ -222,55 +225,16 @@ html, body {
   flex-direction: column;
 }
 
-.brand-row {
-  height: 4rem;
-  padding: 0 var(--space-md);
-  display: flex;
-  align-items: center;
-  gap: var(--space-sm);
-  background: var(--bg-low);
-  border-bottom: 1px solid var(--surface-high);
-}
-
-.brand-icon-box {
-  width: 2rem;
-  height: 2rem;
-  border-radius: var(--radius-md);
-  background: var(--surface-high);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.brand-text {
-  display: flex;
-  flex-direction: column;
-}
-
-.brand-name {
-  font-family: var(--font-sans);
-  font-size: 20px;
-  line-height: 24px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-
-.brand-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  line-height: 14px;
-  letter-spacing: 0.08em;
-  color: var(--ink-variant);
-}
+/* 票51：.brand-row / .brand-icon-box / .brand-text / .brand-name / .brand-sub
+   随纯装饰品牌块整块删除（无 DOM 使用者），规则一并清除。 */
 
 .nav-section-label {
   padding: var(--space-lg) var(--space-md) var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   line-height: 16px;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -316,22 +280,22 @@ html, body {
 }
 
 .nav-label {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
 }
 
 .nav-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   opacity: 0.65;
 }
 
 .nav-badge-decisions {
   background: var(--error-container);
   color: var(--on-error-container);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   line-height: 14px;
   font-weight: 600;
   padding: 2px var(--space-xs);
@@ -347,22 +311,13 @@ html, body {
   gap: var(--space-xs);
 }
 
-.temporal-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink-variant);
-}
-
+/* 票51：.temporal-row（TEMPORAL ENGINE 名行）随该行整行删除，规则清除。 */
 .temporal-drift-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   line-height: 18px;
   color: var(--ink);
 }
@@ -429,38 +384,20 @@ html, body {
   gap: var(--space-md);
 }
 
-.telemetry-pill {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xs);
-  background: var(--surface-highest);
-  padding: 4px var(--space-sm);
-  border-radius: var(--radius-lg);
-}
-
-.pill-text {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  line-height: 16px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--primary);
-}
-
+/* 票51：.telemetry-pill / .pill-text 随「AUTONOMOUS TELEMETRY」pill 整块删除，规则清除。 */
 .contract-text {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .contract-val {
   color: var(--secondary);
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 .header-right {
@@ -473,8 +410,8 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   background: var(--surface);
   padding: 4px var(--space-md);
   border-radius: var(--radius-md);
@@ -493,20 +430,20 @@ html, body {
   background: var(--surface-high);
   padding: 4px var(--space-sm);
   border-radius: var(--radius-md);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   color: var(--ink-variant);
 }
 
 .header-stat-val {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--ink);
 }
 
 .header-sublabel {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
 }
 
 .header-actions {
@@ -518,9 +455,9 @@ html, body {
 .badge-status-running {
   padding: 2px var(--space-sm);
   border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   background: var(--secondary-container);
   color: var(--on-secondary-container);
   font-weight: 600;
@@ -529,9 +466,9 @@ html, body {
 .btn-refresh {
   padding: 2px var(--space-sm);
   border-radius: var(--radius-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   background: var(--surface-highest);
   color: var(--secondary);
   border: none;
@@ -622,9 +559,9 @@ html, body {
 }
 
 .blocker-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--error);
   background: var(--error-container);
   padding: 2px var(--space-xs);
@@ -633,15 +570,15 @@ html, body {
 }
 
 .blocker-target {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .blocker-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -665,10 +602,9 @@ html, body {
 }
 
 .strategy-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -680,7 +616,7 @@ html, body {
 
 .retry-timer-val {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--secondary);
   font-weight: 700;
 }
@@ -750,23 +686,23 @@ html, body {
 }
 
 .trajectory-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   color: var(--primary);
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .trajectory-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .trajectory-desc {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
   color: var(--ink);
   margin: 4px 0 0;
@@ -774,7 +710,7 @@ html, body {
 
 .countdown-pill {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--primary);
   font-weight: 700;
   background: var(--surface);
@@ -784,8 +720,8 @@ html, body {
 
 .action-highlight {
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
 }
 
 
@@ -844,24 +780,24 @@ html, body {
 }
 
 .consensus-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   color: var(--secondary);
   font-weight: 600;
   text-transform: uppercase;
 }
 
 .consensus-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .consensus-title {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   color: var(--ink);
   margin-top: 2px;
 }
@@ -893,11 +829,10 @@ html, body {
 }
 
 .kpi-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   line-height: 16px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   font-weight: 600;
 }
 
@@ -910,17 +845,17 @@ html, body {
 
 .kpi-val-number {
   font-family: var(--font-sans);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
 .kpi-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -996,16 +931,16 @@ html, body {
 
 .col-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .col-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -1022,8 +957,8 @@ html, body {
   padding: 2px var(--space-sm);
   border-radius: var(--radius-lg);
   background: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   color: var(--ink-variant);
 }
 
@@ -1066,7 +1001,7 @@ html, body {
 
 .card-id {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 700;
   color: var(--primary);
 }
@@ -1076,9 +1011,9 @@ html, body {
 }
 
 .card-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   background: var(--surface-high);
   padding: 2px var(--space-xs);
@@ -1087,7 +1022,7 @@ html, body {
 
 .card-title {
   font-family: var(--font-sans);
-  font-size: 16px;
+  font-size: var(--fs-md);
   line-height: 24px;
   font-weight: 500;
   color: var(--ink);
@@ -1104,9 +1039,9 @@ html, body {
   align-items: center;
   justify-content: space-between;
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   padding-top: var(--space-xs);
 }
 
@@ -1118,7 +1053,7 @@ html, body {
 
 .meta-item-right {
   color: var(--secondary);
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 
@@ -1155,7 +1090,7 @@ html, body {
 
 .shelf-title-text {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -1163,9 +1098,9 @@ html, body {
 }
 
 .shelf-branch-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -1206,7 +1141,7 @@ html, body {
 
 .artifact-path {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--ink);
   font-weight: 600;
   text-overflow: ellipsis;
@@ -1215,9 +1150,9 @@ html, body {
 }
 
 .artifact-meta {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -1235,8 +1170,8 @@ html, body {
   color: var(--ink);
   border: none;
   cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -1267,11 +1202,10 @@ html, body {
 }
 
 .security-badge-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--primary);
-  text-transform: uppercase;
   font-weight: 600;
 }
 
@@ -1288,9 +1222,9 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
@@ -1300,10 +1234,10 @@ html, body {
 }
 
 .enclave-desc {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   line-height: 14px;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   margin: 0;
 }
@@ -1312,8 +1246,8 @@ html, body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
 }
 
 .security-metric-tile {
@@ -1324,8 +1258,8 @@ html, body {
 
 .metric-tile-label {
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   display: block;
 }
 
@@ -1364,15 +1298,15 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .telemetry-bold {
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
 }
 
@@ -1380,9 +1314,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-md);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
 }
 
 .session-box {
@@ -1407,7 +1341,7 @@ html, body {
 
 .session-val {
   color: var(--ink);
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 .copyright-tag {
@@ -1438,15 +1372,15 @@ html, body {
 }
 
 .placeholder-subtitle {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .placeholder-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -1461,7 +1395,7 @@ html, body {
 }
 
 .placeholder-text {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   color: var(--ink-variant);
   margin: 0;
 }
@@ -1495,9 +1429,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -1527,18 +1461,18 @@ html, body {
 
 .journey-title {
   font-family: var(--font-sans);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
   margin: 0;
 }
 
 .epoch-pill {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   background: var(--surface);
   padding: 2px var(--space-sm);
@@ -1559,9 +1493,9 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--surface-high);
   color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
 }
 
 .btn-snap {
@@ -1573,11 +1507,10 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--primary-container);
   color: var(--on-primary);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   cursor: pointer;
   transition: filter 0.15s ease, transform 0.15s ease;
 }
@@ -1648,19 +1581,18 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .stage-badge {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-none);
   padding: 2px var(--space-xs);
   border-radius: var(--radius-xs);
   background: var(--surface-high);
@@ -1679,7 +1611,7 @@ html, body {
 
 .stage-name {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -1687,7 +1619,7 @@ html, body {
 }
 
 .stage-desc {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
   color: var(--ink-variant);
   margin: 0;
@@ -1704,15 +1636,15 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .stage-progress-val {
   color: var(--primary);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
 }
 
@@ -1748,13 +1680,14 @@ html, body {
   grid-column: 1 / -1;
   width: 100%;
   padding: var(--space-lg);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   background: var(--bg-low);
-  border: 1px dashed var(--surface-high);
+  border: 1px solid var(--outline-variant);
   border-radius: var(--radius-sm);
+  min-height: 38px;
 }
 
 .stage-kv-row {
@@ -1765,9 +1698,9 @@ html, body {
   padding: 4px var(--space-xs);
   border-radius: var(--radius-xs);
   background: var(--bg-low);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
 }
 
 .stage-kv-label {
@@ -1778,7 +1711,7 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--ink);
 }
 
@@ -1800,14 +1733,14 @@ html, body {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .stage-inline-val {
-  font-size: 13px;
+  font-size: var(--fs-xs);
   color: var(--ink);
 }
 
@@ -1864,7 +1797,7 @@ html, body {
 
 .pipeline-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -1878,15 +1811,15 @@ html, body {
   padding: 4px var(--space-sm);
   border-radius: var(--radius-xs);
   background: var(--bg-low);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .canvas-scale-val {
   color: var(--primary);
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 /* ── 4.4 主轨迹通道 ── */
@@ -2026,9 +1959,9 @@ html, body {
 }
 
 .node-window {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2038,7 +1971,7 @@ html, body {
 }
 
 .node-name {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 500;
   color: var(--ink);
 }
@@ -2049,11 +1982,10 @@ html, body {
 }
 
 .node-status-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   padding: 1px var(--space-xs);
   border-radius: var(--radius-xs);
   background: var(--surface-high);
@@ -2109,18 +2041,17 @@ html, body {
 }
 
 .focus-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .focus-pid {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   background: var(--surface);
   padding: 1px var(--space-xs);
@@ -2131,9 +2062,9 @@ html, body {
   border: none;
   background: transparent;
   color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   cursor: pointer;
 }
 
@@ -2155,15 +2086,15 @@ html, body {
 }
 
 .focus-metric-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .focus-metric-val {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--ink);
 }
@@ -2198,11 +2129,10 @@ html, body {
 }
 
 .log-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2215,8 +2145,8 @@ html, body {
   padding: var(--space-sm);
   border-radius: var(--radius-lg);
   background: var(--bg-lowest);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
 }
 
 .log-line {
@@ -2226,8 +2156,8 @@ html, body {
 }
 
 .log-time {
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--outline);
   flex-shrink: 0;
 }
@@ -2278,6 +2208,16 @@ html, body {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.35);
 }
 
+/* 票50 ②：无真源（pipeline 零节点）时 Inspector 按内容收缩 —— 结构/锚点全保留，
+   仅收留白与行高，压掉全未知占位的物理高度（照票47 空态口径）。 */
+.inspector-card.is-compact { gap: var(--space-xs); padding: var(--space-sm); }
+.inspector-card.is-compact .inspector-node-box { padding: var(--space-xs); gap: 2px; }
+.inspector-card.is-compact .inspector-kv-list { gap: 0; }
+.inspector-card.is-compact .inspector-kv { padding: 1px 0; }
+.inspector-card.is-compact .block-group { gap: 2px; }
+.inspector-card.is-compact .impact-cell { padding: var(--space-xs); }
+.inspector-card.is-compact .fingerprint-box { padding: 2px var(--space-xs); }
+
 .inspector-head {
   display: flex;
   align-items: center;
@@ -2293,17 +2233,17 @@ html, body {
 
 .inspector-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
 }
 
 .inspector-tag {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-none);
   color: var(--primary);
   background: var(--bg-low);
   padding: 1px var(--space-xs);
@@ -2328,18 +2268,18 @@ html, body {
 
 .inspector-node-title {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink);
 }
 
 .inspector-node-status {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: var(--ls-none);
   color: var(--secondary);
 }
 
@@ -2347,9 +2287,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2359,7 +2299,7 @@ html, body {
 
 .inspector-tokens {
   color: var(--primary);
-  font-size: 13px;
+  font-size: var(--fs-xs);
 }
 
 .inspector-kv-list {
@@ -2377,15 +2317,15 @@ html, body {
 }
 
 .kv-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .kv-val {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   color: var(--ink);
   text-align: right;
 }
@@ -2405,11 +2345,10 @@ html, body {
 }
 
 .block-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2443,15 +2382,15 @@ html, body {
 }
 
 .impact-cell-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .impact-cell-val {
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--ink);
   overflow-wrap: anywhere;
@@ -2462,8 +2401,8 @@ html, body {
   border-radius: var(--radius-xs);
   background: var(--bg-lowest);
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -2499,7 +2438,7 @@ html, body {
 
 .telemetry-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -2513,9 +2452,9 @@ html, body {
   padding: 4px var(--space-sm);
   border-radius: var(--radius-xs);
   background: var(--bg-low);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--secondary);
 }
 
@@ -2527,16 +2466,16 @@ html, body {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 14px;
+  font-size: var(--fs-sm);
 }
 
 .telemetry-table thead th {
   padding: var(--space-xs) var(--space-sm);
   background: var(--bg-low);
-  font-family: var(--font-mono);
-  font-size: 11px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
   font-weight: 600;
-  letter-spacing: 0.12em;
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
   white-space: nowrap;
@@ -2552,8 +2491,8 @@ html, body {
 
 .telemetry-table td {
   padding: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   color: var(--ink-variant);
   vertical-align: middle;
 }
@@ -2569,8 +2508,8 @@ html, body {
   border-radius: var(--radius-xs);
   background: var(--surface-high);
   font-weight: 700;
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--secondary);
 }
 
@@ -2603,15 +2542,15 @@ html, body {
 }
 
 .summary-cell-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .summary-cell-val {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
   color: var(--ink);
 }
@@ -2628,9 +2567,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2709,9 +2648,9 @@ html, body {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -2728,7 +2667,7 @@ html, body {
 .decisions-title {
   margin: 0;
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -2759,17 +2698,17 @@ html, body {
 }
 
 .sync-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
 
 .arbitration-count {
-  font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
   color: var(--error);
 }
@@ -2782,8 +2721,8 @@ html, body {
 
 .override-val {
   font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
   color: var(--primary);
 }
@@ -2800,8 +2739,8 @@ html, body {
   background: var(--secondary-container);
   color: var(--on-secondary-container);
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
 }
 
 /* ── 5.2 卡片通用头 ── */
@@ -2820,7 +2759,7 @@ html, body {
 
 .card-head-title {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -2828,9 +2767,9 @@ html, body {
 
 .card-head-tag,
 .card-head-note {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -2862,7 +2801,7 @@ html, body {
 
 .budget-desc {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   color: var(--ink-variant);
 }
 
@@ -2882,9 +2821,9 @@ html, body {
 }
 
 .budget-cell-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
 }
@@ -2896,10 +2835,10 @@ html, body {
 }
 
 .budget-cell-val {
-  font-family: var(--font-mono);
-  font-size: 20px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-lg);
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: var(--ls-none);
 }
 
 .budget-cell-val.val-primary {
@@ -2915,9 +2854,9 @@ html, body {
 }
 
 .budget-cell-unit {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -2943,8 +2882,8 @@ html, body {
 
 .attention-empty {
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   padding: var(--space-sm);
 }
 
@@ -2979,8 +2918,8 @@ html, body {
   align-items: center;
   justify-content: center;
   border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 13px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
   font-weight: 700;
 }
 
@@ -3015,7 +2954,7 @@ html, body {
 }
 
 .attention-title {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   font-weight: 600;
   color: var(--ink);
 }
@@ -3023,9 +2962,9 @@ html, body {
 .attention-level {
   padding: 2px var(--space-xs);
   border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
 }
 
@@ -3055,9 +2994,9 @@ html, body {
 }
 
 .attention-target {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -3070,9 +3009,9 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--surface-high);
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   white-space: nowrap;
 }
@@ -3130,9 +3069,9 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--error);
   color: var(--bg-lowest);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
 }
 
@@ -3141,32 +3080,32 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--surface-highest);
   color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
 }
 
 .gate-meta-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .gate-title {
   margin: 4px 0 0;
   font-family: var(--font-sans);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
 .gate-desc {
   margin: 0;
   max-width: 60rem;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   color: var(--ink-variant);
 }
 
@@ -3189,24 +3128,24 @@ html, body {
 }
 
 .gate-timeout-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
 }
 
 .gate-timeout-val {
   font-family: var(--font-mono);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 700;
   color: var(--primary);
 }
 
 .gate-timeout-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3242,24 +3181,24 @@ html, body {
 }
 
 .traj-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   font-weight: 700;
   color: var(--primary);
 }
 
 .traj-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .traj-desc {
   margin: 0;
-  font-size: 14px;
+  font-size: var(--fs-sm);
   color: var(--ink);
 }
 
@@ -3289,17 +3228,16 @@ html, body {
 }
 
 .pathway-group-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .pathway-group-hint {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--secondary);
 }
 
@@ -3352,7 +3290,7 @@ html, body {
 
 .pathway-label {
   font-family: var(--font-sans);
-  font-size: 20px;
+  font-size: var(--fs-lg);
   line-height: 28px;
   font-weight: 600;
   color: var(--ink);
@@ -3364,9 +3302,9 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--surface-highest);
   color: var(--ink-variant);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
 }
 
@@ -3428,9 +3366,9 @@ html, body {
 }
 
 .ledger-protocol-text {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3443,7 +3381,7 @@ html, body {
 }
 
 .ledger-matrix-row .ledger-title {
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
 }
 
@@ -3451,15 +3389,15 @@ html, body {
   margin: 0;
   font-family: var(--font-sans);
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
 .ledger-merkle-root {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-none);
   color: var(--primary);
   background: var(--bg-low);
   padding: var(--space-xs) var(--space-sm);
@@ -3487,10 +3425,9 @@ html, body {
 }
 
 .ledger-kpi-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3502,17 +3439,17 @@ html, body {
 
 .ledger-kpi-value {
   font-family: var(--font-sans);
-  font-size: 32px;
+  font-size: var(--fs-xl);
   line-height: 40px;
   font-weight: 600;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
 .ledger-kpi-sub {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3538,9 +3475,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--secondary);
   margin-top: var(--space-xs);
 }
@@ -3580,8 +3517,8 @@ html, body {
   outline: none;
   background: transparent;
   font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink);
 }
 
@@ -3591,8 +3528,8 @@ html, body {
 
 .ledger-search-clear {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   background: var(--surface-highest);
   padding: var(--space-xs) var(--space-sm);
@@ -3622,9 +3559,9 @@ html, body {
 }
 
 .ledger-chip-label {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
   padding: 0 var(--space-xs);
@@ -3635,9 +3572,9 @@ html, body {
   border: none;
   border-radius: var(--radius-sm);
   background: transparent;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink-variant);
   cursor: pointer;
@@ -3664,9 +3601,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3690,10 +3627,9 @@ html, body {
 
 .ledger-thead {
   background: var(--surface-high);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   user-select: none;
 }
@@ -3743,16 +3679,16 @@ html, body {
 
 .ledger-seq {
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: var(--fs-xs);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-none);
   color: var(--primary);
 }
 
 .ledger-hash {
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3764,8 +3700,8 @@ html, body {
 .ledger-ts {
   display: block;
   font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink);
   /* 票45 ⑦：ISO 时间戳不换行、不溢出侵入相邻列 */
   white-space: nowrap;
@@ -3779,14 +3715,14 @@ html, body {
 }
 
 .ledger-row .ledger-title {
-  font-size: 14px;
+  font-size: var(--fs-sm);
   line-height: 20px;
 }
 
 .ledger-scope {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.04em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
   overflow-wrap: anywhere;
 }
@@ -3796,8 +3732,8 @@ html, body {
 .ledger-lane {
   display: inline-block;
   font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   padding: var(--space-xs) var(--space-xs);
   border-radius: var(--radius-sm);
   background: var(--surface-high);
@@ -3830,8 +3766,8 @@ html, body {
 
 .ledger-depth {
   font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3884,9 +3820,9 @@ html, body {
 }
 
 .ledger-block-title {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-caps);
   text-transform: uppercase;
   color: var(--ink);
 }
@@ -3900,9 +3836,9 @@ html, body {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.06em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
@@ -3921,9 +3857,9 @@ html, body {
 }
 
 .ledger-immutable-tag {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   padding: var(--space-xs) var(--space-xs);
   border-radius: var(--radius-sm);
   background: var(--surface-high);
@@ -3933,9 +3869,9 @@ html, body {
 .ledger-code {
   margin: 0;
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
   line-height: 18px;
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-none);
   color: var(--ink);
   background: var(--bg);
   border-radius: var(--radius-sm);
@@ -4031,16 +3967,16 @@ html, body {
 }
 
 .ledger-attest-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 
 .ledger-attest-value {
   font-family: var(--font-mono);
-  font-size: 13px;
-  letter-spacing: 0.04em;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink);
   overflow-wrap: anywhere;
 }
@@ -4076,7 +4012,7 @@ html, body {
   border-radius: var(--radius-sm);
   padding: var(--space-sm);
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: var(--fs-xs);
 }
 
 .ledger-verify-label {
@@ -4088,8 +4024,8 @@ html, body {
   align-items: center;
   gap: var(--space-xs);
   font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.08em;
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   font-weight: 700;
 }
 
@@ -4105,10 +4041,9 @@ html, body {
   border-radius: var(--radius-sm);
   background: var(--surface-high);
   color: var(--ink);
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-family: var(--font-sans);
+  font-size: var(--fs-2xs);
+  letter-spacing: var(--ls-none);
   cursor: pointer;
   transition: background-color 0.15s ease;
 }
@@ -4130,9 +4065,9 @@ html, body {
 }
 
 .ledger-enclave-guard {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.1em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--radius-sm);
   background: var(--bg-lowest);
@@ -4167,11 +4102,10 @@ html, body {
   border-radius: var(--radius-md);
 }
 .journey-mode-label {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
-  text-transform: uppercase;
 }
 .journey-mode-buttons {
   display: flex;
@@ -4182,7 +4116,7 @@ html, body {
 .btn-mode {
   padding: 0.35rem 0.75rem;
   font-family: var(--font-sans);
-  font-size: 0.78rem;
+  font-size: var(--fs-2xs);
   color: var(--ink-variant);
   background: var(--surface);
   border: 1px solid var(--outline-variant);
@@ -4228,10 +4162,10 @@ html, body {
   margin-bottom: var(--space-sm);
 }
 .canvas-head-left { display: flex; align-items: center; gap: var(--space-sm); }
-.canvas-title { margin: 0; font-size: 0.95rem; color: var(--ink); }
+.canvas-title { margin: 0; font-size: var(--fs-sm); color: var(--ink); }
 .canvas-meta {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   color: var(--ink-variant);
 }
 .journey-svg-wrap {
@@ -4247,7 +4181,7 @@ html, body {
 .chunk-fold-banner {
   margin-bottom: var(--space-sm);
   padding: var(--space-sm) var(--space-md);
-  font-size: 0.78rem;
+  font-size: var(--fs-2xs);
   color: var(--ink);
   background: var(--surface-high);
   border-left: 3px solid var(--primary);
@@ -4267,7 +4201,7 @@ html, body {
 .btn-playback {
   padding: 0.3rem 0.7rem;
   font-family: var(--font-sans);
-  font-size: 0.76rem;
+  font-size: var(--fs-2xs);
   color: var(--ink);
   background: var(--surface-high);
   border: 1px solid var(--outline-variant);
@@ -4276,11 +4210,11 @@ html, body {
 }
 .btn-playback:hover { border-color: var(--secondary); color: var(--secondary); }
 .replay-speed { display: flex; align-items: center; gap: var(--space-xs); margin-left: var(--space-sm); }
-.speed-label { font-size: 0.72rem; color: var(--ink-variant); }
+.speed-label { font-size: var(--fs-3xs); color: var(--ink-variant); }
 .btn-speed {
   padding: 0.2rem 0.5rem;
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   color: var(--ink-variant);
   background: var(--bg-low);
   border: 1px solid var(--outline-variant);
@@ -4290,14 +4224,14 @@ html, body {
 .btn-speed.is-active { color: var(--on-secondary-container); background: var(--secondary); border-color: var(--secondary); }
 .replay-scrubber-row { display: flex; align-items: center; gap: var(--space-sm); flex: 1 1 220px; }
 .replay-scrubber { flex: 1 1 auto; accent-color: var(--primary); }
-.replay-position { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-variant); white-space: nowrap; }
+.replay-position { font-family: var(--font-mono); font-size: var(--fs-3xs); color: var(--ink-variant); white-space: nowrap; }
 
 /* ── 功能 6 / 1 / 3 · 泳道 SVG ── */
 .journey-lane-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   fill: var(--ink-variant);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--ls-none);
 }
 .journey-node { cursor: pointer; }
 .journey-node.is-hidden { display: none; }
@@ -4308,7 +4242,7 @@ html, body {
 .journey-node-symbol.sym-confirm { color: var(--secondary); }
 .journey-node-label {
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: var(--fs-2xs);
   fill: var(--ink);
   pointer-events: none;
 }
@@ -4316,29 +4250,29 @@ html, body {
 .journey-node.is-pruned .journey-node-label { fill: var(--error); }
 .branch-pruned-line { fill: none; stroke: var(--error); stroke-width: 1.6; stroke-dasharray: 5 4; }
 .pruned-tag {
-  font-family: var(--font-mono);
-  font-size: 9px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   fill: var(--error);
 }
 .gap-fold-mask { pointer-events: none; }
 .gap-fold-dash { pointer-events: none; }
 .gap-fold-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   fill: var(--tertiary);
 }
 
 /* ── 功能 6 · Atlas 拓扑 ── */
 .atlas-legend { display: flex; flex-wrap: wrap; gap: var(--space-md); margin-bottom: var(--space-sm); }
-.atlas-legend-item { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--ink-variant); }
+.atlas-legend-item { display: inline-flex; align-items: center; gap: 4px; font-size: var(--fs-3xs); color: var(--ink-variant); }
 .atlas-legend-glyph { color: var(--primary); }
 .atlas-legend-glyph.sym-hold { color: var(--ink-variant); }
 .atlas-legend-glyph.sym-confirm { color: var(--secondary); }
 .atlas-edge { pointer-events: none; }
 .atlas-node { cursor: pointer; }
 .atlas-node-label {
-  font-family: var(--font-mono);
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   fill: var(--ink-variant);
 }
 
@@ -4354,9 +4288,9 @@ html, body {
 .branch-col-title {
   display: block;
   margin-bottom: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.05em;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
+  letter-spacing: var(--ls-none);
   color: var(--ink-variant);
 }
 .branch-list { display: flex; flex-direction: column; gap: var(--space-xs); }
@@ -4367,10 +4301,10 @@ html, body {
 }
 .branch-row.is-pruned { border: 1px dashed var(--error); }
 .branch-row-head { display: flex; align-items: center; gap: var(--space-sm); }
-.branch-ref { font-family: var(--font-mono); font-size: 0.72rem; color: var(--primary); }
-.branch-type { font-family: var(--font-mono); font-size: 0.68rem; color: var(--ink-variant); }
-.branch-title { font-size: 0.76rem; color: var(--ink); }
-.branch-pruned-tag { font-size: 0.68rem; color: var(--error); }
+.branch-ref { font-family: var(--font-mono); font-size: var(--fs-3xs); color: var(--primary); }
+.branch-type { font-family: var(--font-sans); font-size: var(--fs-3xs); color: var(--ink-variant); }
+.branch-title { font-size: var(--fs-2xs); color: var(--ink); }
+.branch-pruned-tag { font-size: var(--fs-3xs); color: var(--error); }
 
 /* ── 功能 7 · 影响面快照抽屉 ── */
 .impact-drawer {
@@ -4382,10 +4316,10 @@ html, body {
 }
 .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: var(--space-sm); }
 .drawer-head-left { display: flex; align-items: center; gap: var(--space-sm); }
-.drawer-title { font-size: 0.9rem; color: var(--ink); }
+.drawer-title { font-size: var(--fs-sm); color: var(--ink); }
 .drawer-close {
   padding: 0.25rem 0.6rem;
-  font-size: 0.72rem;
+  font-size: var(--fs-3xs);
   color: var(--ink-variant);
   background: var(--surface);
   border: 1px solid var(--outline-variant);
@@ -4396,16 +4330,16 @@ html, body {
 .drawer-col-title {
   display: block;
   margin-bottom: var(--space-xs);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-family: var(--font-sans);
+  font-size: var(--fs-3xs);
   color: var(--ink-variant);
 }
 .drawer-metrics { display: flex; flex-direction: column; gap: 4px; }
-.drawer-metric { display: flex; justify-content: space-between; gap: var(--space-sm); font-size: 0.76rem; }
+.drawer-metric { display: flex; justify-content: space-between; gap: var(--space-sm); font-size: var(--fs-2xs); }
 .drawer-metric-label { color: var(--ink-variant); }
 .drawer-metric-val { color: var(--ink); text-align: right; }
 .drawer-metric-actual .drawer-metric-val { color: var(--tertiary); }
-.drawer-note { margin: var(--space-sm) 0 0; font-size: 0.72rem; color: var(--tertiary); }
+.drawer-note { margin: var(--space-sm) 0 0; font-size: var(--fs-3xs); color: var(--tertiary); }
 
 @media (max-width: 720px) {
   .branch-compare, .drawer-body { grid-template-columns: 1fr; }
@@ -4418,14 +4352,13 @@ html, body {
 /* 全部色彩走 :root token（组件规则内零硬编码十六进制）。                      */
 /* ══════════════════════════════════════════════════════════════════════════ */
 
-/* ── S2/S3 全局壳降权：品牌副标题 / 侧栏组标签 / 时序遥测 → 灰色小字 ── */
-.brand-sub { font-size: 10px; letter-spacing: 0.14em; color: var(--ink-variant); opacity: 0.7; }
-.nav-section-label { font-size: 10px; color: var(--ink-variant); opacity: 0.75; }
-.temporal-label, .drift-label { color: var(--ink-variant); opacity: 0.7; }
+/* ── S2/S3 全局壳降权：侧栏组标签 / 时序遥测 → 灰色小字 ── */
+.nav-section-label { font-size: var(--fs-3xs); color: var(--ink-variant); opacity: 0.75; }
+/* 票51：drift 名去大写改中文小字后再降一档（灰色小字 / 零字距），不参与第一眼竞争 */
+.drift-label { font-family: var(--font-sans); font-size: var(--fs-3xs); letter-spacing: var(--ls-none); color: var(--ink-variant); opacity: 0.7; }
 .temporal-drift-row .drift-val { color: var(--ink-variant); }
 
-/* ── S4 页眉只留「刷新 / 状态」：品牌、契约、ALIVE 遥测移出首屏焦点 ── */
-.cockpit-header .telemetry-pill,
+/* ── S4 页眉只留「刷新 / 状态」：契约、ALIVE 遥测移出首屏焦点（品牌 pill 已由票51 从 DOM 删除） ── */
 .cockpit-header .contract-text,
 .cockpit-header .header-stat-box { display: none; }
 
@@ -4442,23 +4375,26 @@ html, body {
   border: 1px solid var(--surface);
   border-radius: var(--radius-md);
 }
-.board-summary-cell .bsc-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; color: var(--ink-variant); }
-.board-summary-cell .bsc-val { font-size: 15px; font-weight: 600; color: var(--ink); }
+.board-summary-cell .bsc-label { font-family: var(--font-sans); font-size: var(--fs-3xs); letter-spacing: var(--ls-none); color: var(--ink-variant); }
+.board-summary-cell .bsc-val { font-size: var(--fs-md); font-weight: 600; color: var(--ink); }
 #blocker-anchor[data-blocker-state="blocked"] { border-color: var(--error); }
 #blocker-anchor[data-blocker-state="blocked"] .bsc-val { color: var(--error); }
 #blocker-anchor[data-blocker-state="none"] .bsc-val { color: var(--secondary); }
 
+/* 票50 ①：Journey 结论摘要位（与 Board 同构；复用 .board-summary-cell 的格样式，仅两格布局） */
+.journey-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-sm); }
+
 /* 行动条 + 共识队列：压缩为密集一行（保留真源 id 锚点） */
 .trajectory-grid { grid-template-columns: 1fr 1fr; gap: var(--space-sm); }
 .trajectory-card, .consensus-card { padding: var(--space-sm) var(--space-md); border-radius: var(--radius-md); }
-.trajectory-desc { margin: 0; font-size: 13px; }
+.trajectory-desc { margin: 0; font-size: var(--fs-xs); }
 
 /* KPI 空态按内容收缩（不再占 1125×64 大块） */
-.kpi-grid .empty-state { min-height: 0; padding: var(--space-xs) var(--space-md); }
+.kpi-grid .empty-state { padding: var(--space-xs) var(--space-md); }
 
 /* 安全卡压缩为一行（删 3 个未知名词，保留 id 锚点） */
 .security-shelf-card { padding: var(--space-md); justify-content: flex-start; gap: var(--space-xs); }
-.security-line { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); font-family: var(--font-mono); font-size: 11px; color: var(--ink-variant); }
+.security-line { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-sm); font-family: var(--font-sans); font-size: var(--fs-2xs); color: var(--ink-variant); }
 .security-line .security-enclave-status { color: var(--ink); font-weight: 700; }
 .security-line-sep { opacity: 0.5; }
 .security-line .enclave-desc { display: none; }
@@ -4473,29 +4409,30 @@ html, body {
 .decisions-dual-grid { grid-template-columns: minmax(0, 1fr); gap: var(--space-sm); }
 .attention-budget-card, .attention-queue-card { padding: var(--space-md); gap: var(--space-sm); }
 .budget-metrics { padding: var(--space-sm); }
-.budget-desc { font-size: 12px; }
-.decisions-breadcrumb { font-size: 10px; color: var(--ink-variant); opacity: 0.8; }
+.budget-desc { font-size: var(--fs-xs); }
+.decisions-breadcrumb { font-size: var(--fs-3xs); color: var(--ink-variant); opacity: 0.8; }
 .card-head-tag, .gate-meta-tag, .gate-priority-badge { color: var(--ink-variant); opacity: 0.85; }
 
 /* 影响矩阵：五格视觉紧凑（.impact-cell / data-impact-* 锚点全保留） */
 .decisions-flow .impact-matrix { gap: 4px; }
 .decisions-flow .impact-cell { padding: var(--space-xs); }
-.decisions-flow .impact-cell-label { font-size: 9px; }
+.decisions-flow .impact-cell-label { font-size: var(--fs-3xs); }
 
-/* ══ Journey ══ 视觉顺序：页头 → 模式栏 → 状态三格 → 主轴图 → 细节区 → 遥测 */
+/* ══ Journey ══ 视觉顺序：页头 → 结论摘要 → 模式栏 → 状态三格 → 主轴图 → 细节区 → 遥测 */
 .journey-flow > .journey-head { order: 0; }
-.journey-flow > .journey-mode-bar { order: 1; }
-.journey-flow > .stage-grid { order: 2; }
-.journey-flow > .journey-viz { order: 3; }
-.journey-flow > .journey-main-grid { order: 4; }
-.journey-flow > .impact-drawer { order: 5; }
-.journey-flow > .telemetry-card { order: 6; }
+.journey-flow > .journey-summary { order: 1; }
+.journey-flow > .journey-mode-bar { order: 2; }
+.journey-flow > .stage-grid { order: 3; }
+.journey-flow > .journey-viz { order: 4; }
+.journey-flow > .journey-main-grid { order: 5; }
+.journey-flow > .impact-drawer { order: 6; }
+.journey-flow > .telemetry-card { order: 7; }
 
 .journey-mode-bar { padding: var(--space-xs) var(--space-md); }
 .journey-mode-label, .canvas-scale-label, .canvas-scale-val { color: var(--ink-variant); opacity: 0.8; }
 .stage-grid { gap: var(--space-sm); }
 .stage-card { padding: var(--space-sm) var(--space-md); gap: var(--space-sm); }
-.stage-name { font-size: 15px; line-height: 22px; }
+.stage-name { font-size: var(--fs-md); line-height: 22px; }
 .btn-snap, .btn-focus-detail { background: transparent; color: var(--ink-variant); border-color: var(--surface-high); box-shadow: none; }
 
 /* ══ Ledger ══ 隐藏全空 ORIGIN/DEPTH 列；行高压缩；表头中文主名 + 英文次标 */
@@ -4505,9 +4442,9 @@ html, body {
   grid-template-columns: 3rem minmax(6rem, 1fr) minmax(0, 4fr) minmax(0, 1.1fr) minmax(0, 1fr);
   padding: 6px var(--space-lg);
 }
-.ledger-th .th-sub { display: block; font-size: 9px; letter-spacing: 0.1em; opacity: 0.6; }
+.ledger-th .th-sub { display: block; font-size: var(--fs-3xs); letter-spacing: var(--ls-none); opacity: 0.6; }
 .ledger-protocol-note { padding: 0 var(--space-lg); }
-.ledger-protocol-text { font-size: 10px; color: var(--ink-variant); opacity: 0.7; }
+.ledger-protocol-text { font-size: var(--fs-3xs); color: var(--ink-variant); opacity: 0.7; }
 
-/* ══ R5 空态：按内容收缩为紧凑单行（仍横跨 grid 不破版） ══ */
-.empty-state { padding: var(--space-xs) var(--space-md); min-height: 0; }
+/* ══ R5 空态：中性块（票48 起保 min-height 38px，仍横跨 grid 不破版） ══ */
+.empty-state { padding: var(--space-xs) var(--space-md); }

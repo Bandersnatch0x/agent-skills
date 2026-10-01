@@ -288,6 +288,36 @@ async function testStaticRules() {
   });
   assert(wo45Mut.every((r) => r.red),
     `票45 变异组(亲眼变红): 逐一回退被清串 → 对应串级 denylist 断言转红（${wo45Mut.filter((r) => r.red).length}/${wo45Mut.length} 命中；未命中 ${wo45Mut.filter((r) => !r.red).map((r) => r.k).join(', ') || '无'}）`);
+
+  // ── 票 51：侧栏/页眉装饰·遥测标签砍/降权 —— 串级 denylist + 逐一回退变异 ─────────
+  // 谓词只扫「页面源」(timeline.html + app.js)，不扫本门禁自身，故阵列内列出被砍串是安全的。
+  const WO51_SOURCES = timelineHtml + '\n' + js;
+  const WO51_DENY = {
+    '① 纯装饰品牌块': ['class="brand-row"', 'class="brand-name"', 'class="brand-sub"', 'CONTINUUM // V4.2'],
+    '② 无信息量遥测标签': ['TEMPORAL ENGINE', 'EPOCH DRIFT', 'AUTONOMOUS TELEMETRY'],
+    '③ 页脚死静态版本串': ['v4.2.1-RELEASE'],
+  };
+  Object.keys(WO51_DENY).forEach((k) => {
+    const hits = WO51_DENY[k].filter((s) => WO51_SOURCES.includes(s));
+    assert(hits.length === 0,
+      `票51 ${k} 串级 denylist(保持绿): 页面源不再含被砍/降权串（残留 ${hits.length} 处: ${hits.join(' / ') || '无'}）`);
+  });
+  const WO51_MUTATIONS = [
+    { k: '① 纯装饰品牌块', where: 'html', from: '<div class="aside-top">', to: '<div class="aside-top"><div class="brand-row"><span class="brand-name">CHRONOS</span><span class="brand-sub">CONTINUUM // V4.2</span></div>' },
+    { k: '② 无信息量遥测标签', where: 'html', from: '<div class="header-left">', to: '<div class="header-left"><span class="pill-text">AUTONOMOUS TELEMETRY</span>' },
+    { k: '② 无信息量遥测标签', where: 'html', from: '<span class="drift-label">漂移</span>', to: '<span class="drift-label">EPOCH DRIFT</span>' },
+    { k: '② 无信息量遥测标签', where: 'html', from: '<div class="aside-bottom">', to: '<div class="aside-bottom"><div class="temporal-row"><span class="temporal-label">TEMPORAL ENGINE</span></div>' },
+    { k: '③ 页脚死静态版本串', where: 'html', from: 'id="telemetry-kernel">—</span>', to: 'id="telemetry-kernel">v4.2.1-RELEASE</span>' }
+  ];
+  assert(WO51_MUTATIONS.every((m) => (m.where === 'js' ? js : timelineHtml).indexOf(m.from) !== -1),
+    '票51 变异前置(保持绿): 每处砍/降权锚点在当前源码中确实存在（防锚点漂移导致变异空转）');
+  const wo51Mut = WO51_MUTATIONS.map((m) => {
+    const base = m.where === 'js' ? js : timelineHtml;
+    const mutated = base.split(m.from).join(m.to);
+    return { k: m.k, red: WO51_DENY[m.k].filter((s) => mutated.includes(s)).length > 0 };
+  });
+  assert(wo51Mut.every((r) => r.red),
+    `票51 变异组(亲眼变红): 逐一回退被砍/降权串 → 对应串级 denylist 断言转红（${wo51Mut.filter((r) => r.red).length}/${wo51Mut.length} 命中；未命中 ${wo51Mut.filter((r) => !r.red).map((r) => r.k).join(', ') || '无'}）`);
 }
 
 // ── 2. 转义与 XSS 边界断言 (调用真 scripts/tl.mjs:serializeState) ─────────────
@@ -2367,6 +2397,150 @@ async function testHeadlessChrome() {
     assert(p6Res.sepRestored && Math.abs(p6Res.fDefaultRestored - p6Res.fDefault) < 0.05,
       `P4-6 还原(保持绿): defs 复原后 default 填充率回到 ${(p6Res.fDefaultRestored * 100).toFixed(1)}%，分离度复绿`);
 
+    // ── 票52 · 影响面抽屉默认显示「当前节点」（= 画布事件流最新一条）+ 点节点切换 ──
+    // 「当前节点」取自 state.activity 时间序最新一条，**不是**票50 #journey-summary 读
+    // state.pipeline 声明状态的那个（后者真跑恒「未提供」，两者是两回事）。
+    const wo52Res = await evalRes(`
+      (() => {
+        const app = window.__TL_APP__;
+        const clean = (s) => String(s == null ? "" : s).replace(/\\s+/g, " ").trim();
+        const latestOf = (st) => {
+          const evs = (st.activity || []).slice().sort((a, b) => {
+            const ta = Date.parse(a.t), tb = Date.parse(b.t);
+            if (ta !== tb) return ta - tb;
+            return String(a.seq).localeCompare(String(b.seq));
+          });
+          return evs.length ? evs[evs.length - 1] : null;
+        };
+        const refOf = (ev) => String((ev && (ev.ref || ev.seq)) || "");
+        const evOfSeq = (seq) => (window.__TL__.activity || []).find(e => String(e.seq) === String(seq));
+
+        app.render(window.__TL__);
+        app.switchJourneyMode("timeline");
+        const drawer = document.getElementById("impact-drawer");
+        const expected = latestOf(window.__TL__);
+        const expectRef = refOf(expected);
+        const openDefault = getComputedStyle(drawer).display !== "none";
+        const defaultRef = drawer.getAttribute("data-ref");
+        const defaultTitle = clean(document.getElementById("drawer-title").textContent);
+
+        // ② 点一个「ref 与最新不同」的节点 → 内容切换到该节点
+        const nodes = Array.from(document.querySelectorAll("#journey-svg-container .journey-node"));
+        const differs = (n) => { const e = evOfSeq(n.getAttribute("data-seq")); return e && refOf(e) !== expectRef; };
+        // 优先取「默认可见」节点（贴合用户真实点击路径），否则退回任一同 ref 不同的节点
+        const other = nodes.find(n => differs(n) && !n.classList.contains("is-hidden")) || nodes.find(differs);
+        const otherEv = other ? evOfSeq(other.getAttribute("data-seq")) : null;
+        let switchRef = null, switchTitle = null;
+        if (other) {
+          other.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+          switchRef = drawer.getAttribute("data-ref");
+          switchTitle = clean(document.getElementById("drawer-title").textContent);
+        }
+
+        // ③ 变异A（行为 → 模拟「默认打开被去掉」）：打回改前初始态 display:none，默认谓词转红；render() 复绿
+        drawer.style.display = "none";
+        drawer.removeAttribute("data-ref");
+        const mutantOpen = getComputedStyle(drawer).display !== "none";
+        app.render(window.__TL__);
+        app.switchJourneyMode("timeline");
+        const restoredOpen = getComputedStyle(drawer).display !== "none" && drawer.getAttribute("data-ref") === expectRef;
+
+        // ③ 变异B（数据 → 证明读的是「最新」而非硬编码）：追加一条更晚事件 → data-ref 跟随新最新
+        const mutState = JSON.parse(JSON.stringify(window.__TL__));
+        mutState.activity = (mutState.activity || []).concat([{ seq: 99, t: "2026-09-28T11:00:00.000Z", type: "decide", ref: "D1", actor: "user" }]);
+        app.render(mutState);
+        app.switchJourneyMode("timeline");
+        const mutRef = drawer.getAttribute("data-ref");
+        app.render(window.__TL__);
+        app.switchJourneyMode("timeline");
+        const mutateRestored = drawer.getAttribute("data-ref") === expectRef;
+
+        return { openDefault, defaultRef, defaultTitle, expectRef, hasOther: Boolean(other),
+          switchRef, switchTitle, otherRef: otherEv ? refOf(otherEv) : null,
+          mutantOpen, restoredOpen, mutRef, mutateRestored };
+      })()
+    `);
+    assert(wo52Res.openDefault && wo52Res.defaultRef === wo52Res.expectRef,
+      `票52 ① 真跑态(保持绿): 未点击即默认显示影响面抽屉，data-ref 对应画布事件流最新一条（实测 "${wo52Res.defaultRef}"，期望 "${wo52Res.expectRef}"）`);
+    assert(wo52Res.openDefault && wo52Res.defaultTitle.indexOf(wo52Res.expectRef) !== -1,
+      `票52 ① 真跑态(保持绿): 默认抽屉标题含最新事件 ref（"${wo52Res.defaultTitle}"）`);
+    assert(wo52Res.hasOther && wo52Res.switchRef === wo52Res.otherRef && wo52Res.switchRef !== wo52Res.defaultRef,
+      `票52 ② 真跑态(保持绿): 点任一节点 → 抽屉内容切换到该节点（"${wo52Res.defaultRef}" → "${wo52Res.switchRef}"，期望 "${wo52Res.otherRef}"）`);
+    assert(!wo52Res.mutantOpen && wo52Res.restoredOpen,
+      `票52 ③ 变异组(亲眼变红): 打回改前初始 display:none → 「默认显示」断言转红 (mutantOpen: ${wo52Res.mutantOpen})；render() 复绿 (restoredOpen: ${wo52Res.restoredOpen})`);
+    assert(wo52Res.mutRef === "D1" && wo52Res.mutRef !== wo52Res.expectRef && wo52Res.mutateRestored,
+      `票52 ③ 变异组(亲眼变红/数据): 追加更晚事件后 data-ref 跟随新最新 ("${wo52Res.mutRef}" ≠ "${wo52Res.defaultRef}")，还原复回 (${wo52Res.mutateRestored})`);
+
+    // ── 票53 · 节点详情抽屉(#journey-inspector)接「所选节点」──
+    // 默认 = 画布事件流最新一条（标识 / target=ref / executor=actor）；点任一节点切换；
+    // 事件真源 {seq,t,type,ref,actor} 无 status → 诚实中性 —，不留静态假状态 QUEUED。
+    const wo53Res = await evalRes(`
+      (() => {
+        const app = window.__TL_APP__;
+        const clean = (s) => String(s == null ? "" : s).replace(/\\s+/g, " ").trim();
+        const latestOf = (st) => {
+          const evs = (st.activity || []).slice().sort((a, b) => {
+            const ta = Date.parse(a.t), tb = Date.parse(b.t);
+            if (ta !== tb) return ta - tb;
+            return String(a.seq).localeCompare(String(b.seq));
+          });
+          return evs.length ? evs[evs.length - 1] : null;
+        };
+        const identOf = (ev) => ev
+          ? clean('#' + String(ev.seq).padStart(2, '0') + ' ' + [ev.type, ev.ref].filter(Boolean).join(' '))
+          : '#--';
+        const evOfSeq = (seq) => (window.__TL__.activity || []).find(e => String(e.seq) === String(seq));
+        const readInsp = () => ({
+          title: clean((document.getElementById('inspector-node-title') || {}).textContent),
+          target: clean((document.getElementById('inspector-target') || {}).textContent),
+          executor: clean((document.getElementById('inspector-executor') || {}).textContent),
+          status: clean((document.getElementById('inspector-node-status') || {}).textContent)
+        });
+
+        app.render(window.__TL__);
+        app.switchJourneyMode("timeline");
+        const expectEv = latestOf(window.__TL__);
+        const def = readInsp();
+
+        // ② 点一个「ref 与最新不同」的节点 → 详情抽屉切换到该节点
+        const nodes = Array.from(document.querySelectorAll("#journey-svg-container .journey-node"));
+        const differs = (n) => { const e = evOfSeq(n.getAttribute("data-seq")); return e && String(e.ref || e.seq) !== String(expectEv.ref || expectEv.seq); };
+        const other = nodes.find(n => differs(n) && !n.classList.contains("is-hidden")) || nodes.find(differs);
+        const otherEv = other ? evOfSeq(other.getAttribute("data-seq")) : null;
+        let sw = null;
+        if (other) { other.dispatchEvent(new MouseEvent("click", { bubbles: true })); sw = readInsp(); }
+
+        // ③ 变异（接源/数据）: 抽掉 state.activity → 默认谓词转红（面板读的就是事件流），还原复绿
+        const mutState = JSON.parse(JSON.stringify(window.__TL__));
+        mutState.activity = [];
+        app.render(mutState);
+        app.switchJourneyMode("timeline");
+        const mutTitle = readInsp().title;
+        app.render(window.__TL__);
+        app.switchJourneyMode("timeline");
+        const restoredTitle = readInsp().title;
+
+        return {
+          def, expectTitle: identOf(expectEv),
+          expectTarget: 'TARGET: ' + String(expectEv.ref || '--'),
+          expectExec: String(expectEv.actor || '--'),
+          hasOther: Boolean(other), sw,
+          otherTitle: identOf(otherEv),
+          otherTarget: 'TARGET: ' + String((otherEv && otherEv.ref) || '--'),
+          otherExec: String((otherEv && otherEv.actor) || '--'),
+          mutTitle, restoredTitle
+        };
+      })()
+    `);
+    assert(wo53Res.def.title === wo53Res.expectTitle && wo53Res.def.target === wo53Res.expectTarget && wo53Res.def.executor === wo53Res.expectExec,
+      `票53 ① 真跑态(保持绿): 未点击即显示事件流最新节点 —— 标识 "${wo53Res.def.title}"（期望 "${wo53Res.expectTitle}"）/ target "${wo53Res.def.target}"（期望 "${wo53Res.expectTarget}"）/ executor "${wo53Res.def.executor}"（期望 "${wo53Res.expectExec}"）`);
+    assert(wo53Res.def.status === '—',
+      `票53 ① 无源状态诚实化: #inspector-node-status 不留静态假状态 QUEUED，实测 "${wo53Res.def.status}"`);
+    assert(wo53Res.hasOther && wo53Res.sw && wo53Res.sw.title === wo53Res.otherTitle && wo53Res.sw.title !== wo53Res.def.title && wo53Res.sw.target === wo53Res.otherTarget && wo53Res.sw.executor === wo53Res.otherExec,
+      `票53 ② 真跑态(保持绿): 点任一节点 → 详情抽屉切换到该节点（"${wo53Res.def.title}" → "${wo53Res.sw && wo53Res.sw.title}"，期望 "${wo53Res.otherTitle}"；target "${wo53Res.sw && wo53Res.sw.target}"）`);
+    assert(wo53Res.mutTitle === '#--' && wo53Res.mutTitle !== wo53Res.expectTitle && wo53Res.restoredTitle === wo53Res.expectTitle,
+      `票53 ③ 变异(亲眼变红/接源): 抽掉 state.activity 后详情抽屉退回空态 "${wo53Res.mutTitle}"（≠ 最新 "${wo53Res.expectTitle}"），还原复绿 "${wo53Res.restoredTitle}"`);
+
     // ── E2 (§WO45, 票36 搬到合成输入): 兜底臂诚实化 —— 删键必须渲 —，不得由 || 0 家族伪造读数 ──
     // stages / pipeline / queue.review 均为投影器零生产者键 → 本臂不再读夹具，改为在断言体内
     // 自造合成 state 后 app.render（照 P4-7b/P4-8 手法），保住该臂的核心价值且与生成式夹具解耦。
@@ -2666,6 +2840,74 @@ async function testHeadlessChrome() {
       `票45 ⑧ 几何(票47 改写/保持绿): 空态压成一行（高 ${wo45Res.stageEmptyH}px ≤ 48）且仍横跨 grid 不破版（占比 ${wo45Res.stageSpanRatio.toFixed(3)}、横向溢出 ${wo45Res.stageEmptyBreak}）`);
     assert(wo45Res.shelfTitle === 'Latest Artifacts Shelf' && wo45Res.impactNote === 'DECLARED IMPACT',
       `票45 ⑨⑩ 行为(保持绿): 货架标题 "${wo45Res.shelfTitle}" / 影响矩阵标注 "${wo45Res.impactNote}"`);
+
+    // ── 票50：pi 复审三处遗留收尾 —— ① Journey 结论摘要位 + ② Inspector 空态压缩 ────
+    // ② 的高度几何量测钉在 pi 同口径视口 1440×1000（默认 headless 视口 <1200 会触发
+    // .impact-matrix 折 3 列使读数随环境浮动），量测后清 override，不影响后续截图。
+    console.log('\n  正在执行 票50 验证 (Journey 结论摘要位 / Inspector 全未知占位压缩)...');
+    await cdp('Emulation.setDeviceMetricsOverride', { width: 1440, height: 1000, deviceScaleFactor: 1, mobile: false });
+    const wo50Res = await evalRes(`
+      (() => {
+        const app = window.__TL_APP__;
+        const clean = (s) => String(s == null ? "" : s).replace(/\\s+/g, " ").trim();
+        const navJourney = document.getElementById("nav-item-journey");
+        if (navJourney) navJourney.click();
+
+        // ① 摘要位真跑态：pipeline 零生产者 → 两格在且明确写未知（不得由历史事件推断当前阶段）
+        const sum = document.getElementById("journey-summary");
+        const hasPipelineKey = Object.prototype.hasOwnProperty.call(window.__TL__ || {}, "pipeline");
+        const stockCur = clean((document.getElementById("journey-summary-current") || {}).textContent);
+        const stockNext = clean((document.getElementById("journey-summary-next") || {}).textContent);
+        const summaryControl = !!sum && !hasPipelineKey
+          && stockCur === "当前节点未提供" && stockNext === "下一等待点未提供";
+
+        // ① 正向覆盖：合成 pipeline 含 current/awaiting → 摘要位跟随真源；还原 → 复回未知
+        const synth = JSON.parse(JSON.stringify(window.__TL__));
+        synth.pipeline = [
+          { seq: 1, name: "环境初始化", status: "settled", item_ref: "T1" },
+          { seq: 2, name: "规范校验", status: "current", item_ref: "T3" },
+          { seq: 3, name: "共识落盘", status: "awaiting", item_ref: "T5" }
+        ];
+        app.render(synth);
+        const synthCur = clean((document.getElementById("journey-summary-current") || {}).textContent);
+        const synthNext = clean((document.getElementById("journey-summary-next") || {}).textContent);
+        app.render(window.__TL__);
+        const restoredCur = clean((document.getElementById("journey-summary-current") || {}).textContent);
+
+        // ① 变异：掐掉摘要位容器 → 「摘要位在且写未知」断言必转红；随后原位还原
+        const sumParent = sum ? sum.parentNode : null;
+        const sumNext = sum ? sum.nextSibling : null;
+        if (sum) sumParent.removeChild(sum);
+        const mutMissing = !document.getElementById("journey-summary");
+        if (sum) sumParent.insertBefore(sum, sumNext);
+        const restoredExists = !!document.getElementById("journey-summary");
+
+        // ② Inspector 空态：无真源真跑态带 is-compact、高度收在阈值内，且 5 格影响矩阵结构保留
+        const insp = document.getElementById("journey-inspector");
+        const hasCompact = !!insp && insp.classList.contains("is-compact");
+        const compactH = insp ? Math.round(insp.getBoundingClientRect().height) : -1;
+        const impactCells = document.querySelectorAll("#journey-impact-matrix .impact-cell").length;
+        // ② 变异：摘掉 is-compact 类 → 高度回到大值；加回复原
+        if (insp) insp.classList.remove("is-compact");
+        const tallH = insp ? Math.round(insp.getBoundingClientRect().height) : -1;
+        if (insp) insp.classList.add("is-compact");
+        const restoredH = insp ? Math.round(insp.getBoundingClientRect().height) : -1;
+
+        return { summaryControl, stockCur, stockNext, synthCur, synthNext, restoredCur,
+                 mutMissing, restoredExists, hasCompact, compactH, tallH, restoredH, impactCells };
+      })()
+    `);
+    await cdp('Emulation.clearDeviceMetricsOverride');
+    assert(wo50Res.summaryControl,
+      `票50 ① 摘要位(真跑态): #journey-summary 在、无 pipeline 真源时两格明确写未知（当前节点 "${wo50Res.stockCur}" / 下一等待点 "${wo50Res.stockNext}"），不从历史事件推断当前阶段`);
+    assert(wo50Res.synthCur === "#NO02 规范校验" && wo50Res.synthNext === "#NO03 共识落盘" && wo50Res.restoredCur === "当前节点未提供",
+      `票50 ① 正向覆盖: 合成 pipeline(current/awaiting) → 摘要位跟随声明状态渲出（"${wo50Res.synthCur}" / "${wo50Res.synthNext}"），还原真跑态复回未知`);
+    assert(wo50Res.mutMissing && wo50Res.restoredExists,
+      `票50 ① 变异组(亲眼变红): 移除 #journey-summary 容器后「摘要位在且写未知」断言转红（DOM 实删实红，还原后容器复在）`);
+    assert(wo50Res.hasCompact && wo50Res.compactH > 0 && wo50Res.compactH <= 340 && wo50Res.impactCells === 5,
+      `票50 ② Inspector 压缩: 无真源真跑态带 is-compact、高度 ${wo50Res.compactH}px ≤ 340，且 impact 5 格结构保留（${wo50Res.impactCells} 格）`);
+    assert(wo50Res.tallH > 340 && wo50Res.restoredH === wo50Res.compactH,
+      `票50 ② 变异组(亲眼变红): 摘掉 is-compact 后 Inspector 高度回到 ${wo50Res.tallH}px（> 340）断言转红，类加回复绿（${wo50Res.restoredH}px）`);
 
     // 时空视图模式截图留证
     await evalRes(`window.__TL_APP__.switchJourneyMode("timeline"); true`);
