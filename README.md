@@ -24,6 +24,7 @@ scripts/link-skills.sh
 
 - **[distill-project-manual](./skills/engineering/distill-project-manual/SKILL.md)** — Distill an existing repo's scattered docs, conventions, and enforced rules into one compact agent operating manual, with a traceability gate (every rule points back to a real source) and a behavior probe (a fresh agent must answer routing questions from the manual alone). Use when onboarding future agents to a codebase you didn't set up.
 - **[implementation-quality-audit](./skills/engineering/implementation-quality-audit/SKILL.md)** — Audit a messy, half-finished, or agent-built repository for implementation quality: map, contract checklist, five-axis review, prioritized findings. Not for style-only or single-file nit work.
+- **[timeline-show](./skills/engineering/timeline-show/SKILL.md)** — A reviewable ledger for a long task: opens a run automatically, appends events as work proceeds, and renders TODO / DOING / DONE, decision points, blockers, and check evidence into a self-contained HTML you can double-click offline — with a 10-second self-refresh. For work expected to run longer than 30 minutes, or when asked to "show the whole picture".
 
 ### Product
 

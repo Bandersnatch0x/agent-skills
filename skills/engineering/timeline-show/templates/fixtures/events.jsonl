@@ -1,0 +1,21 @@
+{"v":3,"seq":1,"t":"2026-09-28T09:30:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"run.start","ref":null,"data":{"title":"长任务状态机与复核台账落地执行","goal":"生成式夹具：state.js 由 project() 真输出序列化而来；转义探针 run.goal 承载 </script> <script>","theme":"dark","accent":"#c2563f","density":"comfortable"}}
+{"v":3,"seq":2,"t":"2026-09-28T09:32:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.add","ref":"T1","data":{"title":"定义 4px 几何网格与皮肤颜色令牌 (tokens.mjs)"}}
+{"v":3,"seq":3,"t":"2026-09-28T09:34:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.start","ref":"T1","data":{}}
+{"v":3,"seq":4,"t":"2026-09-28T09:36:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.done","ref":"T1","data":{"outcome":"completed","changes":[{"path":"migrations/001_schema.sql","add":12,"del":3}]}}
+{"v":3,"seq":5,"t":"2026-09-28T09:38:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"decision.open","ref":"D2","data":{"title":"裁决: 默认执行路径的加载策略","question":"默认执行路径采用哪种加载策略？","why_now":"缓存破除策略影响后续所有页面刷新行为","options":[{"key":"A","label":"使用动态时间戳查询参数并保持 fallback 备用加载","default":true},{"key":"B","label":"仅使用固定相对路径依赖浏览器静态无缓存重读"}]}}
+{"v":3,"seq":6,"t":"2026-09-28T09:56:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.add","ref":"T2","data":{"title":"实现 10 秒动态 script 刷新机制与页面内状态保护"}}
+{"v":3,"seq":7,"t":"2026-09-28T09:58:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.add","ref":"T3","data":{"title":"安全防御: CSP meta 零网络请求 & 全部走 textContent 渲染"}}
+{"v":3,"seq":8,"t":"2026-09-28T10:00:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"branch.fork","ref":"T3","data":{}}
+{"v":3,"seq":9,"t":"2026-09-28T10:02:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.start","ref":"T2","data":{}}
+{"v":3,"seq":10,"t":"2026-09-28T10:04:00.000Z","run":"run_demo_20260928_v1","actor":"subagent","type":"redo","ref":"T3","data":{}}
+{"v":3,"seq":11,"t":"2026-09-28T10:06:00.000Z","run":"run_demo_20260928_v1","actor":"user","type":"branch.prune","ref":"T3","data":{}}
+{"v":3,"seq":12,"t":"2026-09-28T10:08:00.000Z","run":"run_demo_20260928_v1","actor":"tool","type":"check.run","ref":"T1","data":{"id":"C1","name":"schema 一致性检查","result":"pass","exit":0,"dur_s":2}}
+{"v":3,"seq":13,"t":"2026-09-28T10:10:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.add","ref":"T5","data":{"title":"响应式多视图: 深色模式、窄屏流式与打印友好排版"}}
+{"v":3,"seq":14,"t":"2026-09-28T10:11:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"item.done","ref":"T5","data":{"outcome":"completed"}}
+{"v":3,"seq":15,"t":"2026-09-28T10:12:00.000Z","run":"run_demo_20260928_v1","actor":"tool","type":"check.claim","ref":"T5","data":{"id":"C2","name":"真实视口检查","result":"fail","exit":1,"dur_s":4}}
+{"v":3,"seq":16,"t":"2026-09-28T10:13:00.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"decision.open","ref":"D1","data":{"title":"裁决: 本地 file:// 协议下的脚本刷新缓存破除策略","question":"本地离线打开时采用哪种缓存破除手段？","options":[{"key":"A","label":"使用动态时间戳查询参数并保持 fallback 备用加载","default":true},{"key":"B","label":"仅使用固定相对路径依赖浏览器静态无缓存重读","impact":{"declared":{"redo":["T1"]}}}]}}
+{"v":3,"seq":17,"t":"2026-09-28T10:13:30.000Z","run":"run_demo_20260928_v1","actor":"user","type":"decision.answer","ref":"D1","data":{"key":"B","by":"you","via":"chat"}}
+{"v":3,"seq":18,"t":"2026-09-28T10:14:00.000Z","run":"run_demo_20260928_v1","actor":"user","type":"decide","ref":"D1","data":{}}
+{"v":3,"seq":19,"t":"2026-09-28T10:14:30.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"artifact","ref":"T1","data":{"title":"初始 schema 迁移脚本","path":"migrations/001_schema.sql","summary":"T1 交付的建表与索引 DDL"}}
+{"v":3,"seq":20,"t":"2026-09-28T10:14:40.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"artifact","ref":"T2","data":{"title":"动态刷新脚本 patch","path":"templates/app.js","summary":"10s 刷新机制的差分补丁"}}
+{"v":3,"seq":21,"t":"2026-09-28T10:14:50.000Z","run":"run_demo_20260928_v1","actor":"claude","type":"artifact","ref":"T5","data":{"title":"响应式排版回归截图","path":"templates/screenshots/dark.png","summary":"窄屏流式与打印排版的真视口证据"}}

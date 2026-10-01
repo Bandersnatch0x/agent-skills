@@ -1,10 +1,13 @@
 // 皮肤面单一真源:两刀共用的语义角色代币与几何取值表(票 #28 E2 的机械落实)。
 // 「两刀共用一套皮肤面」在这里不是承诺而是 import——改一处两图同变。
-export const TOKEN = {
-  paper: ['#fdfcfa', '#16151a'], paper2: ['#f5f2ee', '#1e1d23'],
-  ink: ['#26221f', '#f2eee9'], inkStrong: ['#141210', '#fbf8f4'], muted: ['#6f6862', '#a9a29b'],
-  rule: ['#ded8d1', '#3a3840'], accent: ['#c2563f', '#e2795f'], accentTint: ['#f7e7e2', '#3a2620'],
-};
+//
+// 票 24 的拆分(共用皮肤面怎么落 / [11]):**代币数据**抽到同目录 `tokens.json`(纯数据),
+// 本文件退化为**薄加载器**;数据可被逐字节复制到 sibling 技能(timeline-show),由仓内
+// 漂移夹具断言两份 `tokens.json` 逐字节相同。这里只共享**数据**,不共享代码:
+// `GRID` / `commonProbes` / `cssVars` 的逻辑留在原处(静态刀与新刀的探针本就该不同)。
+import { readFileSync } from 'node:fs';
+
+export const TOKEN = JSON.parse(readFileSync(new URL('./tokens.json', import.meta.url), 'utf8'));
 
 // 4px 网格:只约束矩形的 x/y/宽/高;圆角取值表;文本基线与路径派生坐标刻意不上网格。
 export const GRID = { step: 4, radius: [4, 6, 8], focusBudget: 2 };
