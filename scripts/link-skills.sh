@@ -37,15 +37,16 @@ for DEST in "${DESTS[@]}"; do
   mkdir -p "$DEST"
   for i in "${!names[@]}"; do
     name="${names[$i]}"; src="${srcs[$i]}"; target="$DEST/$name"
-    if [ -e "$target" ] && [ ! -L "$target" ]; then
-      if [ "$FORCE" = "1" ]; then
-        rm -rf "$target"
-      else
-        echo "skip $name: $target 已存在且不是符号链接;不删除(确要覆盖请加 --force)" >&2
-        continue
-      fi
+    # 先试后兜:不去猜「这个条目是什么」——MSYS 对 Windows junction 的 -e / -L / -d 判定都不可靠,
+    # 猜错的代价是 ln 失败 + set -e 让整脚本半途退出(实测:一个 junction 就让后面所有技能装不上)。
+    # 直接试重指:成功照旧;失败则按「非符号链接」跳过并打印,要覆盖须显式 --force。
+    if ln -sfn "$src" "$target" 2>/dev/null; then
+      echo "linked $name -> $src ($DEST)"
+    elif [ "$FORCE" = "1" ]; then
+      rm -rf "$target"
+      ln -sfn "$src" "$target" && echo "linked $name -> $src ($DEST) (--force 覆盖)"
+    else
+      echo "skip $name: $target 未能重指(实体目录或 junction);不删除(确要覆盖请加 --force)" >&2
     fi
-    ln -sfn "$src" "$target"
-    echo "linked $name -> $src ($DEST)"
   done
 done
