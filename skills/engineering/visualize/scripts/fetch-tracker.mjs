@@ -23,6 +23,13 @@ const REPO = flag('--repo', 'Bandersnatch0x/agent-scaffold');
 const MAP = Number(flag('--map', '19'));
 const OUT = flag('--out', 'census.json');
 
+// 分页取数组端点:--paginate 会把多页拼成多份 JSON,故用 --slurp 收成「页数组」再摊平——
+// 地图子票与阻塞关系都可能超过一页,只取首页会静默截断票况。
+function ghPaged(path) {
+  const pages = gh(['api', '--paginate', '--slurp', path]);
+  return Array.isArray(pages) ? pages.flat() : [];
+}
+
 function gh(args) {
   for (let i = 0; i < 5; i++) {
     try {
@@ -46,13 +53,13 @@ function gh(args) {
 const inRepo = (b) => (b.repository_url ?? '').includes(REPO);
 
 function main() {
-  const subs = gh(['api', `repos/${REPO}/issues/${MAP}/sub_issues?per_page=100`]);
+  const subs = ghPaged(`repos/${REPO}/issues/${MAP}/sub_issues?per_page=100`);
   if (!Array.isArray(subs) || subs.length === 0) {
     throw new Error(`地图 #${MAP} 没有子票,tracker 无票况可取。拒绝产图(空板不是票况)`);
   }
   const tickets = [];
   for (const s of subs) {
-    const blocked = gh(['api', `repos/${REPO}/issues/${s.number}/dependencies/blocked_by`]);
+    const blocked = ghPaged(`repos/${REPO}/issues/${s.number}/dependencies/blocked_by`);
     const open = blocked.filter((b) => b.state === 'open');
     tickets.push({
       number: s.number,
