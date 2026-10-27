@@ -16,6 +16,9 @@
     "./skills/product/product-scope-audit",
     "./skills/productivity/claude-session-manager",
     "./skills/productivity/claude-retrospective",
-    "./skills/productivity/find-hackathons"
+    "./skills/productivity/find-hackathons",
+    "./skills/engineering/requirement-interview",
+    "./skills/engineering/spec-authoring",
+    "./skills/engineering/ticket-cutting"
   ]
 }
